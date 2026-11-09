@@ -706,8 +706,9 @@ table.cmp.live td.hc .jd { margin: 0; }
 .rt-box .rt-wait { position: absolute; inset: 0; display: flex; align-items: center; padding-left: 12px; font-size: 12.5px; color: var(--muted); }
 .rt-box.loaded .rt-wait { display: none; }
 .rt-box .tradingview-widget-copyright { display: none; } /* 출처는 이름표 옆 'TradingView' 글자로 표시 */
-.tape.rt.off .rt-box { height: auto; }
-.tape.rt.off .rt-wait { position: static; padding: 0 12px; }
+.tape.rt.off .rt-box { height: 46px; }  /* 꺼도 켰을 때와 같은 높이 → 화면이 덜컥 움직이지 않음 */
+.tape.rt.off .rt-wait { font-size: 12px; }   /* 글씨는 세로 가운데(위의 flex 정렬 그대로) */
+.tape.rt.off .rt-sw { color: var(--accent); font-weight: 600; }  /* '켜기'는 눈에 띄게 */
 .rt-sw { flex: none; align-self: stretch; border: 0; border-left: 1px solid var(--line); background: var(--surface); color: var(--muted); font: inherit; font-size: 12px; padding: 0 10px; cursor: pointer; }
 .tape.rt .tape-lab .lab2 { display: flex; flex-direction: column; line-height: 1.25; }  /* '실시간' 위, 'TradingView' 아래 두 줄 */
 .tape.rt .tape-lab .lab2 b { font-size: 11.5px; font-weight: 600; }
@@ -2799,7 +2800,7 @@ details.stock summary .tick { display: none; }
       sw.setAttribute('aria-pressed', on ? 'true' : 'false');
       if (!ready) return;
       if (on) mount();
-      else { shownTheme = null; box.classList.remove('loaded'); box.innerHTML = '<div class="rt-wait">꺼져 있어요</div>'; }
+      else { shownTheme = null; box.classList.remove('loaded'); box.innerHTML = '<div class="rt-wait">실시간 띠 꺼짐</div>'; }
     }
     sw.addEventListener('click', function () {
       try { localStorage.setItem('noteRtTape', isOn() ? 'off' : 'on'); } catch (e) {}
