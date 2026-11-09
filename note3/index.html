@@ -685,6 +685,27 @@ table.cmp.live td.hc .jd { margin: 0; }
 .tape-run span { white-space: nowrap; }
 .tape-run b { color: var(--accent); font-weight: 400; margin-right: 8px; }
 @keyframes tape { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* 시세 띠 두 줄: 왼쪽 이름표로 '실시간'(TradingView)과 '종가 기준'(우리 자료)을 구분해요 */
+.tape { display: flex; align-items: center; }
+.tape-view { flex: 1; min-width: 0; overflow: hidden; }
+.tape-lab { flex: none; align-self: stretch; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-right: 1px solid var(--line); background: var(--surface); font-family: var(--font-body); font-size: 11.5px; font-weight: 600; white-space: nowrap; color: var(--muted); }
+.tape-lab .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.tape.rt { margin-bottom: 6px; min-height: 46px; }
+.tape.rt .tape-lab { color: var(--up); }
+.tape.rt .tape-lab .dot { background: var(--up); animation: rtblink 1.6s ease-in-out infinite; }
+@keyframes rtblink { 50% { opacity: .25; } }
+.tape.rt.off .tape-lab .dot { animation: none; background: var(--muted); }
+.tape.rt.off .tape-lab { color: var(--muted); }
+.rt-box { position: relative; height: 46px; }
+.rt-box .rt-wait { position: absolute; inset: 0; display: flex; align-items: center; padding-left: 12px; font-size: 12.5px; color: var(--muted); }
+.rt-box.loaded .rt-wait { display: none; }
+.rt-box .tradingview-widget-copyright { display: none; } /* 출처는 이름표 옆 'TradingView' 글자로 표시 */
+.tape.rt.off .rt-box { height: auto; }
+.tape.rt.off .rt-wait { position: static; padding: 0 12px; }
+.rt-sw { flex: none; align-self: stretch; border: 0; border-left: 1px solid var(--line); background: var(--surface); color: var(--muted); font: inherit; font-size: 12px; padding: 0 10px; cursor: pointer; }
+.rt-src { font-weight: 400; color: var(--muted); }
+.rt-src:hover { color: var(--fg); }
+@media (prefers-reduced-motion: reduce) { .tape.rt .tape-lab .dot { animation: none; } }
 @media (prefers-reduced-motion: reduce) { .chev { transition: none; } .tape-run { animation: none; } }
 
 /* ===== 나스닥 노트 3 ===== */
@@ -966,7 +987,12 @@ details.stock summary .tick { display: none; }
     
     <p class="where" id="menuWhere" aria-live="polite"></p>
   </div>
-  <div class="tape" aria-hidden="true"><div class="tape-run" id="tapeRun"></div></div>
+  <div class="tape rt" id="rtTape">
+    <span class="tape-lab"><i class="dot"></i>실시간 <a class="rt-src" href="https://kr.tradingview.com/" target="_blank" rel="noopener nofollow">TradingView</a></span>
+    <div class="tape-view rt-box" id="rtBox"><div class="rt-wait">실시간 시세 띠 불러오는 중…</div></div>
+    <button type="button" class="rt-sw" id="rtSw" aria-pressed="true" title="실시간 시세 띠 켜기/끄기">끄기</button>
+  </div>
+  <div class="tape"><span class="tape-lab"><i class="dot"></i>종가 기준 <span id="tapeAsof"></span></span><div class="tape-view" aria-hidden="true"><div class="tape-run" id="tapeRun"></div></div></div>
 
   <div class="stale" id="stale" role="status" hidden></div>
 
@@ -2704,6 +2730,10 @@ details.stock summary .tick { display: none; }
   /* 시세 띠: market/latest 를 받을 때마다 다시 채워요. 같은 줄을 두 번 이어 붙여 끊김 없이 돌아요. */
   function renderTape(items) {
     var el = $('tapeRun'); if (!el) return;
+    // 띠 왼쪽 이름표에 종가 날짜(미국 날짜) 표시
+    var dates = items ? Object.keys(items).map(function (t) { return items[t] && items[t].date; }).filter(Boolean).sort() : [];
+    var last = dates.length ? dates[dates.length - 1].split('-') : null;
+    if ($('tapeAsof')) $('tapeAsof').textContent = last ? Number(last[1]) + '/' + Number(last[2]) : '';
     if (!items) { el.innerHTML = ''; return; }
     var row = Object.keys(items).map(function (t) {
       var q = items[t];
@@ -2714,6 +2744,66 @@ details.stock summary .tick { display: none; }
     }).join('');
     el.innerHTML = row ? row + row : '';
   }
+
+  /* ---------- 실시간 시세 띠 (TradingView 무료 위젯) ----------
+     - 우리 종목 목록(ALL)을 TradingView 형식(거래소:기호)으로 바꿔 넘겨요.
+       ex가 적힌 종목(KO·BAC·LLY = NYSE)만 따로, VOO는 TradingView에서 AMEX, 나머지는 NASDAQ.
+     - 페이지가 다 그려진 뒤(load)에 불러와서 첫 화면을 느리게 하지 않아요.
+     - '끄기'를 누르면 위젯을 지우고, 그 선택을 이 브라우저에 기억해요(휴대폰 데이터·배터리 아끼기).
+     - 밝게/어둡게를 바꾸면 위젯 색도 다시 맞춰요. */
+  (function () {
+    var box = $('rtBox'), sw = $('rtSw'), wrap = $('rtTape');
+    if (!box || !sw) return;
+    var root = document.documentElement, mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+    var shownTheme = null, ready = false;
+    function theme() {
+      var a = root.getAttribute('data-note-theme');
+      if (a === 'light' || a === 'dark') return a;
+      return mq && mq.matches ? 'dark' : 'light';
+    }
+    function tvSym(d) {
+      if (d.t === 'VOO') return 'AMEX:VOO';
+      return (d.ex === 'NYSE' ? 'NYSE' : 'NASDAQ') + ':' + d.t;
+    }
+    function isOn() { try { return localStorage.getItem('noteRtTape') !== 'off'; } catch (e) { return true; } }
+    function mount() {
+      shownTheme = theme();
+      box.classList.remove('loaded');
+      box.innerHTML = '<div class="rt-wait">실시간 시세 띠 불러오는 중…</div>';
+      var holder = document.createElement('div'); holder.className = 'tradingview-widget-container';
+      var inner = document.createElement('div'); inner.className = 'tradingview-widget-container__widget';
+      var s = document.createElement('script');
+      s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js'; s.async = true;
+      s.textContent = JSON.stringify({
+        symbols: ALL.map(function (d) { return { proName: tvSym(d), title: d.n }; }),
+        showSymbolLogo: true, isTransparent: true, displayMode: 'adaptive', colorTheme: shownTheme, locale: 'kr'
+      });
+      s.onerror = function () { var w = box.querySelector('.rt-wait'); if (w) w.textContent = 'TradingView에 연결하지 못했어요(광고 차단 기능을 확인해 주세요).'; };
+      // 위젯 화면(iframe)이 생기면 '불러오는 중' 글자를 감춰요
+      var ob = new MutationObserver(function () { if (holder.querySelector('iframe')) { box.classList.add('loaded'); ob.disconnect(); } });
+      ob.observe(holder, { childList: true, subtree: true });
+      holder.appendChild(inner); holder.appendChild(s); box.appendChild(holder);
+    }
+    function apply() {
+      var on = isOn();
+      wrap.classList.toggle('off', !on);
+      sw.textContent = on ? '끄기' : '켜기';
+      sw.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (!ready) return;
+      if (on) mount();
+      else { shownTheme = null; box.classList.remove('loaded'); box.innerHTML = '<div class="rt-wait">꺼져 있어요</div>'; }
+    }
+    sw.addEventListener('click', function () {
+      try { localStorage.setItem('noteRtTape', isOn() ? 'off' : 'on'); } catch (e) {}
+      apply();
+    });
+    function retheme() { if (ready && isOn() && shownTheme && shownTheme !== theme()) mount(); }
+    new MutationObserver(retheme).observe(root, { attributes: true, attributeFilter: ['data-note-theme'] });
+    if (mq) { try { mq.addEventListener('change', retheme); } catch (e) {} }
+    function go() { ready = true; apply(); }
+    apply();
+    if (document.readyState === 'complete') setTimeout(go, 0); else window.addEventListener('load', function () { setTimeout(go, 0); });
+  })();
 
   /* ---------- 오늘의 종목 히트맵 (db: market/latest, 매일 예약 작업이 채움) ---------- */
   (function () {
