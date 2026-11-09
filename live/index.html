@@ -74,7 +74,11 @@ header a { color: var(--muted); font-size: 13px; }
 #infoBox .tv { min-height: 170px; }
 /* 휴대폰에서는 TradingView '지금 가격'이 회사 이름을 여러 줄로 감싸서, 위젯이 정한 높이보다 길어져 가격이 잘려요.
    좁은 화면에서만 칸을 넉넉히(240px) 늘려 가격과 등락까지 다 보이게 해요. */
-@media (max-width: 759px) { #info iframe { height: 240px !important; } }
+@media (max-width: 759px) {
+  #infoBox .tv { min-height: 0; height: 222px; overflow: hidden; }   /* 칸 = 내용 높이에 딱 맞춤(아래 빈칸 없앰) */
+  #info iframe { height: 222px !important; }
+  #info .tradingview-widget-copyright { display: none; }   /* 위젯 안 TradingView 로고와 바닥글 출처로 대신 */
+}
 @media (max-width: 759px) { #chartBox .tv { height: 380px; } }
 .tradingview-widget-copyright { font-size: 11px; color: var(--muted); margin-top: 4px; }
 .tradingview-widget-copyright a { color: inherit; }
