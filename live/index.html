@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>미국 주식 실시간 보기 · 나스닥 노트</title>
+<meta name="description" content="미국 주식 전체 종목을 검색하고 실시간 시세와 간단한 분석을 보는 페이지">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   색과 글꼴: 나스닥 노트 3과 같은 값을 씁니다.
+   밝은 테마가 기본이고, 휴대폰·PC가 어두운 모드면 자동으로 어두운 색으로 바뀝니다.
+   한국식으로 오름 = 빨강(--up), 내림 = 파랑(--down)입니다.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+  --bg: #EFE6D7; --surface: #FBF7F0; --fg: #2B2118; --muted: #584834; --line: #DCCDB6;
+  --accent: #8A5528; --accent-bg: #F2E3CC; --up: #C5352B; --down: #2D5BAE;
+  --btn-bg: #6B4220; --btn-fg: #FFF8EC; --flash: rgba(138, 85, 40, .16);
+  --font-body: "IBM Plex Sans KR", system-ui, -apple-system, "Malgun Gothic", sans-serif;
+  --font-num: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #1B1510; --surface: #251E17; --fg: #EEE4D4; --muted: #C9B89E; --line: #3B3026;
+    --accent: #D9A064; --accent-bg: #3A2A1A; --up: #FF6B5E; --down: #6F95FF;
+    --btn-bg: #D9A064; --btn-fg: #1B1510; --flash: rgba(217, 160, 100, .18);
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.6;
+  font-variant-numeric: tabular-nums; word-break: keep-all;
+  padding: 0 max(16px, env(safe-area-inset-right)) 48px max(16px, env(safe-area-inset-left));
+}
+.wrap { max-width: 980px; margin: 0 auto; }
+.num { font-family: var(--font-num); }
+.muted { color: var(--muted); }
+.up { color: var(--up); }
+.down { color: var(--down); }
+button, input { font: inherit; color: inherit; }
+
+/* 머리말 */
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; padding: 22px 0 14px; }
+header h1 { font-size: 21px; margin: 0; letter-spacing: -.01em; }
+header a { color: var(--muted); font-size: 13px; }
+.status { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.chip {
+  font-size: 12px; padding: 2px 9px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--muted); white-space: nowrap;
+}
+.chip::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; background: currentColor; vertical-align: 1px; }
+.chip.on { color: var(--accent); border-color: var(--accent); }
+
+/* 카드(흰 상자) 공통 */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+.card h2 { font-size: 13px; font-weight: 600; color: var(--muted); margin: 0 0 10px; letter-spacing: .02em; }
+
+/* 접속 키 입력 상자 */
+#keyBox p { margin: 0 0 10px; font-size: 14px; }
+.row { display: flex; gap: 8px; }
+.row input { flex: 1; min-width: 0; }
+input[type=text], input[type=search], input[type=password] {
+  width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--bg); outline: none; font-size: 16px; /* 16px 미만이면 아이폰이 화면을 확대해 버려요 */
+}
+input:focus { border-color: var(--accent); }
+.btn { padding: 10px 16px; border-radius: 10px; border: 0; background: var(--btn-bg); color: var(--btn-fg); font-weight: 600; cursor: pointer; white-space: nowrap; }
+.btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+
+/* 검색 */
+#searchMeta { font-size: 12px; margin-top: 6px; }
+#results { list-style: none; margin: 8px 0 0; padding: 0; max-height: 320px; overflow-y: auto; }
+#results li button {
+  width: 100%; display: grid; grid-template-columns: 76px 1fr auto; gap: 10px; align-items: baseline;
+  text-align: left; padding: 9px 6px; background: none; border: 0; border-top: 1px solid var(--line); cursor: pointer;
+}
+#results li button:hover, #results li button:focus { background: var(--accent-bg); outline: none; }
+#results .sym { font-family: var(--font-num); font-weight: 600; }
+#results .desc { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#results .type { font-size: 11px; color: var(--muted); }
+
+/* 관심종목 */
+#watch { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+.w {
+  position: relative; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--bg); cursor: pointer; transition: background .6s;
+}
+.w.sel { border-color: var(--accent); }
+.w .s { font-family: var(--font-num); font-weight: 600; font-size: 14px; }
+.w .p { font-family: var(--font-num); font-size: 15px; }
+.w .c { font-family: var(--font-num); font-size: 12px; }
+.w .x { position: absolute; top: 4px; right: 6px; border: 0; background: none; color: var(--muted); font-size: 15px; cursor: pointer; padding: 2px 4px; }
+.flash { background: var(--flash) !important; transition: none !important; }
+
+/* 종목 상세 */
+#detail .top { display: flex; gap: 12px; align-items: center; }
+#detail .logo { width: 40px; height: 40px; border-radius: 9px; background: var(--bg); object-fit: contain; border: 1px solid var(--line); flex: none; }
+#detail .name { font-size: 18px; font-weight: 700; line-height: 1.3; }
+#detail .sub { font-size: 13px; color: var(--muted); }
+#detail .price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin: 14px 0 4px; }
+#detail .big { font-family: var(--font-num); font-size: 34px; font-weight: 600; letter-spacing: -.02em; border-radius: 6px; padding: 0 4px; margin-left: -4px; transition: background .6s; }
+#detail .chg { font-family: var(--font-num); font-size: 17px; font-weight: 600; }
+#detail .when { font-size: 12px; color: var(--muted); }
+.summary { margin: 14px 0; padding: 12px 14px; border-radius: 10px; background: var(--accent-bg); font-size: 15px; }
+.summary b { font-weight: 700; }
+
+/* 범위 막대 (일중 범위, 52주 범위) */
+.range { margin: 14px 0 4px; }
+.range .lab { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+.range .lab span:nth-child(2) { color: var(--fg); font-weight: 600; }
+.bar { position: relative; height: 6px; border-radius: 3px; background: var(--line); margin: 6px 0 4px; }
+.bar i { position: absolute; top: -5px; width: 4px; height: 16px; border-radius: 2px; background: var(--accent); transform: translateX(-50%); }
+.range .ends { display: flex; justify-content: space-between; font-family: var(--font-num); font-size: 12px; }
+
+/* 지표 표 */
+dl.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0 18px; margin: 14px 0 0; }
+dl.stats div { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; }
+dl.stats dt { color: var(--muted); }
+dl.stats dd { margin: 0; font-family: var(--font-num); text-align: right; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.empty { color: var(--muted); font-size: 14px; padding: 8px 0; }
+.err { color: var(--up); font-size: 14px; }
+
+footer { font-size: 12px; color: var(--muted); margin-top: 18px; line-height: 1.7; }
+footer a { color: inherit; }
+[hidden] { display: none !important; }
+
+@media (min-width: 760px) {
+  .grid2 { display: grid; grid-template-columns: 360px 1fr; gap: 14px; align-items: start; }
+  .grid2 > div > .card:last-child { margin-bottom: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>미국 주식 실시간 보기</h1>
+  <a href="../">← 나스닥 노트</a>
+  <div class="status">
+    <span id="mkt" class="chip">시장 확인 중</span>
+    <span id="conn" class="chip">연결 준비</span>
+  </div>
+</header>
+
+<!-- 접속 키가 없을 때만 보이는 상자 -->
+<section id="keyBox" class="card" hidden>
+  <h2>시세 접속 키</h2>
+  <p>시세는 Finnhub에서 받아 와요. <a href="https://finnhub.io/register" target="_blank" rel="noopener">finnhub.io</a>에서 무료로 받은 키를 넣으면 이 브라우저에만 저장돼요.</p>
+  <form id="keyForm" class="row">
+    <input id="keyInput" type="password" autocomplete="off" placeholder="API 키 붙여넣기" aria-label="Finnhub API 키">
+    <button class="btn" type="submit">저장</button>
+  </form>
+</section>
+
+<div class="grid2">
+  <div>
+    <section class="card">
+      <h2>종목 검색 (미국 전체)</h2>
+      <input id="q" type="search" placeholder="예: AAPL, 엔비디아는 NVDA, Coca-Cola" autocomplete="off" aria-label="종목 검색">
+      <div id="searchMeta" class="muted">종목 목록 불러오는 중…</div>
+      <ul id="results"></ul>
+    </section>
+
+    <section class="card">
+      <h2>관심종목 <span class="muted" style="font-weight:400">· 실시간</span></h2>
+      <div id="watch"></div>
+    </section>
+  </div>
+
+  <div>
+    <section id="detail" class="card">
+      <div class="empty">종목을 검색하거나 관심종목을 누르면 여기에 자세히 나와요.</div>
+    </section>
+  </div>
+</div>
+
+<footer>
+  시세 출처: <a href="https://finnhub.io" target="_blank" rel="noopener">Finnhub</a>. 무료 요금제라 체결가가 조금 늦거나 빠질 수 있고, 장이 닫혀 있으면 마지막 가격을 보여 줘요.<br>
+  간단한 규칙으로 만든 요약이며 투자 권유가 아니에요. 관심종목은 이 브라우저에만 저장돼요.
+</footer>
+</div>
+
+<script>
+"use strict";
+/* =====================================================================
+   0. 설정
+   ---------------------------------------------------------------------
+   FINNHUB_KEY: 공개 페이지에 넣을 무료 접속 키입니다.
+     - 비워 두면 화면 위에 '키 입력 상자'가 나오고, 방문자가 넣은 키를
+       그 사람 브라우저에만 저장해서 씁니다.
+     - 여기 넣은 키는 누구나 페이지 소스에서 볼 수 있으니,
+       이 페이지 전용으로 새로 만든 무료 키만 넣으세요.
+   ===================================================================== */
+const FINNHUB_KEY = "";
+const API = "https://finnhub.io/api/v1";
+const WS_URL = "wss://ws.finnhub.io";
+const CALLS_PER_MIN = 55;          // 무료 한도는 1분 60회. 여유를 두고 55회로 맞춥니다.
+const DEFAULT_WATCH = ["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "SPY", "QQQ"];
+const MAX_WATCH = 20;              // 관심종목 최대 개수 (실시간 연결은 50개까지 허용)
+const SYMBOLS_CACHE_DAYS = 7;      // 전체 종목 목록은 일주일에 한 번만 새로 받습니다.
+
+/* ---------------------------------------------------------------------
+   브라우저 저장소(localStorage) 읽기·쓰기
+   - 사생활 보호 모드 등에서는 저장소가 막혀 오류가 날 수 있어서
+     try/catch로 감싸 두었습니다. 실패하면 그냥 저장 안 하고 넘어갑니다.
+   --------------------------------------------------------------------- */
+const store = {
+  get(k, fallback) { try { const v = localStorage.getItem(k); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+};
+
+let apiKey = FINNHUB_KEY || store.get("live.key", "");
+
+/* 화면 요소를 짧게 부르기 위한 도우미 */
+const $ = (id) => document.getElementById(id);
+/* 글자를 넣은 요소 만들기. textContent를 써서 종목 이름에 이상한 글자가 있어도 안전합니다. */
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined && text !== null) e.textContent = text;
+  return e;
+}
+
+/* =====================================================================
+   1. 숫자 보기 좋게 바꾸기
+   ===================================================================== */
+const isNum = (v) => typeof v === "number" && isFinite(v);
+function fmtPrice(v) {
+  if (!isNum(v)) return "–";
+  const d = v >= 1000 ? 2 : v >= 1 ? 2 : 4;     // 1달러 미만 종목은 소수 넷째 자리까지
+  return v.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+function fmtPct(v) { return isNum(v) ? (v > 0 ? "+" : "") + v.toFixed(2) + "%" : "–"; }
+function fmtChg(v) { return isNum(v) ? (v > 0 ? "+" : v < 0 ? "−" : "") + fmtPrice(Math.abs(v)) : "–"; }
+function fmtCap(millions) {          // Finnhub 시가총액 단위는 '백만 달러'
+  if (!isNum(millions) || millions <= 0) return "–";
+  const usd = millions * 1e6;
+  if (usd >= 1e12) return "$" + (usd / 1e12).toFixed(2) + "조";
+  if (usd >= 1e8) return "$" + Math.round(usd / 1e8).toLocaleString() + "억";
+  return "$" + Math.round(usd / 1e4).toLocaleString() + "만";
+}
+function fmtX(v) { return isNum(v) ? v.toFixed(1) + "배" : "–"; }
+function fmtTime(sec) {             // 초 단위 시각 → 한국 시간
+  if (!sec) return "";
+  return new Date(sec * 1000).toLocaleString("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+function dirClass(v) { return !isNum(v) || v === 0 ? "" : v > 0 ? "up" : "down"; }
+
+/* =====================================================================
+   2. Finnhub 부르기 + 호출 횟수 조절
+   ---------------------------------------------------------------------
+   무료 요금제는 1분에 60번까지만 부를 수 있어요.
+   그래서 모든 요청을 '줄(queue)'에 세우고, 최근 1분 동안 부른 횟수가
+   55번을 넘으면 잠깐 기다렸다가 보냅니다.
+   ===================================================================== */
+const callTimes = [];     // 최근에 부른 시각들(밀리초)
+const queue = [];         // 기다리는 요청들
+let pumping = false;
+
+function api(path, params) {
+  return new Promise((resolve, reject) => { queue.push({ path, params, resolve, reject, tries: 0 }); pump(); });
+}
+async function pump() {
+  if (pumping) return;
+  pumping = true;
+  while (queue.length) {
+    const now = Date.now();
+    while (callTimes.length && now - callTimes[0] > 60000) callTimes.shift();   // 1분 지난 기록은 버림
+    if (callTimes.length >= CALLS_PER_MIN) {                                   // 한도에 닿으면 기다림
+      await sleep(60000 - (now - callTimes[0]) + 50);
+      continue;
+    }
+    const job = queue.shift();
+    callTimes.push(Date.now());
+    send(job);                     // 기다리지 않고 보내서 여러 요청이 동시에 오가게 함
+  }
+  pumping = false;
+}
+async function send(job) {
+  const qs = new URLSearchParams(Object.assign({}, job.params, { token: apiKey }));
+  try {
+    const res = await fetch(API + job.path + "?" + qs.toString());
+    if (res.status === 429 && job.tries < 2) {       // 너무 자주 불렀다는 뜻 → 잠깐 쉬고 다시 줄에 섬
+      job.tries++; await sleep(5000 * job.tries); queue.unshift(job); pump(); return;
+    }
+    if (res.status === 401 || res.status === 403) throw Object.assign(new Error("키가 올바르지 않거나 무료 요금제에서 쓸 수 없는 자료예요."), { code: res.status });
+    if (!res.ok) throw new Error("시세 서버 오류 (" + res.status + ")");
+    job.resolve(await res.json());
+  } catch (e) { job.reject(e); }
+}
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/* =====================================================================
+   3. 화면 상태(지금 보고 있는 것들)
+   ===================================================================== */
+const state = {
+  symbols: [],                         // 전체 종목 [기호, 이름, 종류]
+  watch: store.get("live.watch", DEFAULT_WATCH.slice()),
+  quotes: {},                          // 종목별 최근 시세 { c:현재가, pc:전일종가, h, l, o, t }
+  current: null,                       // 상세 화면에 띄운 종목 기호
+  info: {},                            // 종목별 회사 정보·지표(한 번 받으면 다시 안 받음)
+};
+
+/* =====================================================================
+   4. 전체 종목 목록 (검색용)
+   ---------------------------------------------------------------------
+   /stock/symbol?exchange=US 를 한 번 부르면 미국 상장 종목 수만 개가 옵니다.
+   용량이 커서 꼭 필요한 칸(기호·이름·종류)만 남겨 저장해 두고,
+   검색은 내려받은 목록 안에서 바로 찾습니다(검색할 때마다 호출하지 않음).
+   ===================================================================== */
+async function loadSymbols() {
+  const cached = store.get("live.symbols.v1", null);
+  if (cached && Date.now() - cached.at < SYMBOLS_CACHE_DAYS * 864e5 && cached.list && cached.list.length) {
+    state.symbols = cached.list;
+  } else {
+    const raw = await api("/stock/symbol", { exchange: "US" });
+    state.symbols = raw
+      .filter((r) => r.symbol && r.description)
+      .map((r) => [r.symbol, r.description, r.type || ""]);
+    store.set("live.symbols.v1", { at: Date.now(), list: state.symbols });
+  }
+  $("searchMeta").textContent = "미국 종목 " + state.symbols.length.toLocaleString() + "개 · 기호나 영문 회사 이름으로 찾아요";
+  if ($("q").value) runSearch();
+}
+
+const TYPE_KO = { "Common Stock": "보통주", "ETP": "ETF", "ADR": "ADR", "REIT": "리츠", "Preference": "우선주", "Unit": "유닛", "Closed-End Fund": "폐쇄형펀드" };
+
+/* 검색 점수: 기호가 똑같으면 가장 위, 기호가 그 글자로 시작하면 다음, 이름에 들어 있으면 그다음 */
+function runSearch() {
+  const q = $("q").value.trim().toUpperCase();
+  const ul = $("results");
+  ul.replaceChildren();
+  if (!q) return;
+  const hits = [];
+  for (const row of state.symbols) {
+    const s = row[0], d = row[1].toUpperCase();
+    let score = 0;
+    if (s === q) score = 100;
+    else if (s.startsWith(q)) score = 80 - Math.min(s.length - q.length, 20);
+    else if (d.startsWith(q)) score = 50;
+    else if (d.includes(" " + q)) score = 40;
+    else if (q.length >= 3 && d.includes(q)) score = 30;
+    if (score) {
+      if (row[2] === "Common Stock" || row[2] === "ETP") score += 5;   // 보통주·ETF를 조금 위로
+      hits.push([score, row]);
+    }
+  }
+  hits.sort((a, b) => b[0] - a[0] || a[1][0].length - b[1][0].length);
+  const top = hits.slice(0, 30);
+  if (!top.length) {
+    // 목록에 없어도 기호를 직접 열어 볼 수 있게 함
+    const li = el("li"); const b = el("button");
+    b.append(el("span", "sym", q), el("span", "desc muted", "목록에 없어요 · 이 기호로 열어 보기"), el("span", "type", ""));
+    b.onclick = () => openSymbol(q);
+    li.append(b); ul.append(li); return;
+  }
+  for (const [, row] of top) {
+    const li = el("li"); const b = el("button");
+    b.type = "button";
+    b.append(el("span", "sym", row[0]), el("span", "desc", row[1]), el("span", "type", TYPE_KO[row[2]] || row[2]));
+    b.onclick = () => { openSymbol(row[0]); };
+    li.append(b); ul.append(li);
+  }
+}
+function nameOf(sym) {
+  const row = state.symbols.find((r) => r[0] === sym);
+  return row ? row[1] : "";
+}
+
+/* =====================================================================
+   5. 관심종목
+   ===================================================================== */
+function saveWatch() { store.set("live.watch", state.watch); }
+
+function renderWatch() {
+  const box = $("watch");
+  box.replaceChildren();
+  if (!state.watch.length) { box.append(el("div", "empty", "검색한 종목에서 ‘관심종목에 추가’를 누르세요.")); return; }
+  for (const sym of state.watch) {
+    const card = el("div", "w" + (sym === state.current ? " sel" : ""));
+    card.dataset.sym = sym;
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.append(el("div", "s", sym), el("div", "p", "–"), el("div", "c", ""));
+    const x = el("button", "x", "×");
+    x.type = "button"; x.title = "관심종목에서 빼기"; x.setAttribute("aria-label", sym + " 관심종목에서 빼기");
+    x.onclick = (ev) => { ev.stopPropagation(); toggleWatch(sym); };
+    card.append(x);
+    card.onclick = () => openSymbol(sym);
+    card.onkeydown = (ev) => { if (ev.key === "Enter") openSymbol(sym); };
+    box.append(card);
+    paintWatch(sym, false);
+  }
+}
+/* 관심종목 한 칸의 가격만 다시 칠하기. flash=true면 잠깐 반짝임 */
+function paintWatch(sym, flash) {
+  const card = document.querySelector('.w[data-sym="' + CSS.escape(sym) + '"]');
+  const q = state.quotes[sym];
+  if (!card || !q) return;
+  const chg = isNum(q.pc) && q.pc ? (q.c - q.pc) / q.pc * 100 : null;
+  card.querySelector(".p").textContent = fmtPrice(q.c);
+  const c = card.querySelector(".c");
+  c.textContent = fmtPct(chg);
+  c.className = "c " + dirClass(chg);
+  if (flash) blink(card);
+}
+function toggleWatch(sym) {
+  const i = state.watch.indexOf(sym);
+  if (i >= 0) { state.watch.splice(i, 1); if (sym !== state.current) wsUnsub(sym); }
+  else {
+    if (state.watch.length >= MAX_WATCH) { alertLine("관심종목은 " + MAX_WATCH + "개까지 담을 수 있어요."); return; }
+    state.watch.push(sym); wsSub(sym);
+  }
+  saveWatch(); renderWatch();
+  if (state.current === sym) renderDetail();
+}
+function blink(node) { node.classList.add("flash"); requestAnimationFrame(() => setTimeout(() => node.classList.remove("flash"), 60)); }
+
+/* =====================================================================
+   6. 시세 받기 (REST)
+   ---------------------------------------------------------------------
+   /quote : 현재가 c, 전일 대비 d, 등락률 dp, 고가 h, 저가 l, 시가 o, 전일종가 pc, 시각 t
+   ===================================================================== */
+async function refreshQuote(sym) {
+  const q = await api("/quote", { symbol: sym });
+  if (!q || !isNum(q.c) || (q.c === 0 && q.pc === 0)) throw new Error("이 기호의 시세가 없어요. 상장 폐지되었거나 무료 요금제에서 안 주는 종목일 수 있어요.");
+  const old = state.quotes[sym];
+  // 실시간 체결가가 더 최신이면 현재가는 그대로 두고 나머지 칸만 채움
+  if (old && old.liveAt && old.liveAt > q.t * 1000) Object.assign(old, { pc: q.pc, h: Math.max(q.h, old.c), l: Math.min(q.l, old.c), o: q.o });
+  else state.quotes[sym] = Object.assign({}, q, { liveAt: old ? old.liveAt : 0 });
+  return state.quotes[sym];
+}
+
+/* =====================================================================
+   7. 실시간 체결가 (WebSocket)
+   ---------------------------------------------------------------------
+   WebSocket은 한 번 연결해 두면 서버가 새 체결이 생길 때마다 알아서 보내 주는
+   통로예요. 1분 60회 한도와 따로 계산돼서, 관심종목 가격을 계속 움직이게 할 수 있어요.
+   연결이 끊기면 조금씩 간격을 늘려 가며 다시 연결합니다.
+   ===================================================================== */
+let ws = null, wsTries = 0, wsTimer = null;
+const subscribed = new Set();
+
+function wsConnect() {
+  if (!apiKey || (ws && ws.readyState <= 1)) return;
+  setConn("연결 중", false);
+  try { ws = new WebSocket(WS_URL + "?token=" + encodeURIComponent(apiKey)); } catch (e) { wsRetry(); return; }
+  ws.onopen = () => {
+    wsTries = 0; subscribed.clear();
+    setConn("실시간 연결됨", true);
+    wantedSymbols().forEach(wsSub);
+  };
+  ws.onmessage = (ev) => {
+    let msg; try { msg = JSON.parse(ev.data); } catch (e) { return; }
+    if (msg.type !== "trade" || !Array.isArray(msg.data)) return;
+    // 한 번에 여러 체결이 오면 종목마다 가장 마지막 것만 씀
+    const last = {};
+    for (const t of msg.data) if (!last[t.s] || t.t >= last[t.s].t) last[t.s] = t;
+    for (const sym in last) onTrade(sym, last[sym].p, last[sym].t);
+  };
+  ws.onclose = () => { subscribed.clear(); setConn("실시간 끊김 · 주기 갱신", false); wsRetry(); };
+  ws.onerror = () => { try { ws.close(); } catch (e) {} };
+}
+function wsRetry() {
+  clearTimeout(wsTimer);
+  wsTries++;
+  wsTimer = setTimeout(wsConnect, Math.min(60000, 2000 * 2 ** Math.min(wsTries, 5)));
+}
+function wsSub(sym) {
+  if (ws && ws.readyState === 1 && !subscribed.has(sym)) { ws.send(JSON.stringify({ type: "subscribe", symbol: sym })); subscribed.add(sym); }
+}
+function wsUnsub(sym) {
+  if (ws && ws.readyState === 1 && subscribed.has(sym)) { ws.send(JSON.stringify({ type: "unsubscribe", symbol: sym })); subscribed.delete(sym); }
+}
+function wantedSymbols() { const s = new Set(state.watch); if (state.current) s.add(state.current); return [...s]; }
+
+/* 새 체결가가 들어왔을 때 */
+function onTrade(sym, price, ms) {
+  const q = state.quotes[sym] || (state.quotes[sym] = {});
+  const changed = q.c !== price;
+  q.c = price; q.liveAt = ms; q.t = Math.floor(ms / 1000);
+  if (isNum(q.h) && price > q.h) q.h = price;
+  if (isNum(q.l) && price < q.l) q.l = price;
+  if (state.watch.includes(sym)) paintWatch(sym, changed);
+  if (sym === state.current) paintLive(changed);
+}
+
+function setConn(text, on) { const c = $("conn"); c.textContent = text; c.classList.toggle("on", on); }
+
+/* =====================================================================
+   8. 종목 상세 화면
+   ===================================================================== */
+let openSeq = 0;      // 빠르게 여러 종목을 누를 때, 늦게 온 옛 응답이 화면을 덮지 않게 하는 번호
+
+async function openSymbol(sym) {
+  sym = sym.toUpperCase();
+  const prev = state.current;
+  state.current = sym;
+  if (prev && prev !== sym && !state.watch.includes(prev)) wsUnsub(prev);
+  wsSub(sym);
+  history.replaceState(null, "", "#" + encodeURIComponent(sym));   // 주소에 #AAPL 처럼 남겨서 공유·새로고침해도 같은 종목
+  document.querySelectorAll(".w").forEach((w) => w.classList.toggle("sel", w.dataset.sym === sym));
+  const my = ++openSeq;
+  const box = $("detail");
+  box.replaceChildren(el("div", "empty", sym + " 불러오는 중…"));
+  if (window.innerWidth < 760) box.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  try {
+    // 시세 + 회사 정보 + 지표를 동시에 요청 (종목당 3회 호출, 정보는 한 번 받으면 다시 안 받음)
+    const needInfo = !state.info[sym];
+    const [, profile, metric] = await Promise.all([
+      refreshQuote(sym),
+      needInfo ? api("/stock/profile2", { symbol: sym }).catch(() => ({})) : null,
+      needInfo ? api("/stock/metric", { symbol: sym, metric: "all" }).catch(() => ({})) : null,
+    ]);
+    if (needInfo) state.info[sym] = { profile: profile || {}, metric: (metric && metric.metric) || {} };
+    if (my !== openSeq) return;
+    renderDetail();
+  } catch (e) {
+    if (my !== openSeq) return;
+    box.replaceChildren(el("div", "err", sym + ": " + e.message));
+    if (e.code === 401) showKeyBox(true);
+  }
+}
+
+function renderDetail() {
+  const sym = state.current, q = state.quotes[sym], info = state.info[sym];
+  if (!sym || !q || !info) return;
+  const p = info.profile, m = info.metric;
+  const box = $("detail");
+  box.replaceChildren();
+
+  // 이름·로고
+  const top = el("div", "top");
+  if (p.logo) { const img = el("img", "logo"); img.src = p.logo; img.alt = ""; img.onerror = () => img.remove(); top.append(img); }
+  const t = el("div");
+  t.append(el("div", "name", p.name || nameOf(sym) || sym));
+  t.append(el("div", "sub", [sym, p.exchange && p.exchange.replace(/ ?(NASDAQ|NEW YORK STOCK EXCHANGE).*$/i, "$1"), p.finnhubIndustry].filter(Boolean).join(" · ")));
+  top.append(t);
+  box.append(top);
+
+  // 가격 줄
+  const price = el("div", "price");
+  price.append(el("span", "big", fmtPrice(q.c)), el("span", "chg", ""), el("span", "when", ""));
+  box.append(price);
+
+  // 한 줄 요약
+  box.append(el("div", "summary"));
+
+  // 범위 막대 두 개
+  box.append(rangeBox("dayRange"), rangeBox("yearRange"));
+
+  // 지표 표
+  const dl = el("dl", "stats");
+  const rows = [
+    ["시가", fmtPrice(q.o)], ["전일 종가", fmtPrice(q.pc)],
+    ["시가총액", fmtCap(p.marketCapitalization)], ["PER", fmtX(m.peTTM ?? m.peBasicExclExtraTTM)],
+    ["PBR", fmtX(m.pbQuarterly ?? m.pbAnnual)], ["베타", isNum(m.beta) ? m.beta.toFixed(2) : "–"],
+    ["52주 수익률", fmtPct(m["52WeekPriceReturnDaily"])], ["배당수익률", isNum(m.currentDividendYieldTTM) ? m.currentDividendYieldTTM.toFixed(2) + "%" : "–"],
+  ];
+  for (const [k, v] of rows) { const d = el("div"); d.append(el("dt", "", k), el("dd", "", v)); dl.append(d); }
+  box.append(dl);
+
+  // 버튼
+  const act = el("div", "actions");
+  const inWatch = state.watch.includes(sym);
+  const b1 = el("button", "btn" + (inWatch ? " ghost" : ""), inWatch ? "관심종목에서 빼기" : "관심종목에 추가");
+  b1.type = "button"; b1.onclick = () => toggleWatch(sym);
+  act.append(b1);
+  if (p.weburl) { const a = el("a", "btn ghost", "회사 홈페이지"); a.href = p.weburl; a.target = "_blank"; a.rel = "noopener"; a.style.textDecoration = "none"; act.append(a); }
+  box.append(act);
+
+  paintLive(false);
+}
+
+function rangeBox(id) {
+  const r = el("div", "range"); r.id = id;
+  const lab = el("div", "lab"); lab.append(el("span"), el("span"), el("span"));
+  const bar = el("div", "bar"); bar.append(el("i"));
+  const ends = el("div", "ends"); ends.append(el("span"), el("span"));
+  r.append(lab, bar, ends);
+  return r;
+}
+function paintRange(id, title, low, high, now) {
+  const r = $(id); if (!r) return;
+  const ok = isNum(low) && isNum(high) && high > low && isNum(now);
+  const pos = ok ? Math.max(0, Math.min(1, (now - low) / (high - low))) : null;
+  const [a, b] = r.querySelectorAll(".lab span");
+  a.textContent = title;
+  b.textContent = pos === null ? "" : Math.round(pos * 100) + "% 위치";
+  r.querySelector(".bar i").style.left = pos === null ? "50%" : (pos * 100) + "%";
+  r.querySelector(".bar i").style.opacity = pos === null ? 0 : 1;
+  const [lo, hi] = r.querySelectorAll(".ends span");
+  lo.textContent = "최저 " + fmtPrice(low); hi.textContent = "최고 " + fmtPrice(high);
+  return pos;
+}
+
+/* 가격이 바뀔 때마다 다시 칠하는 부분(가격, 등락, 범위, 요약) */
+function paintLive(flash) {
+  const sym = state.current, q = state.quotes[sym], info = state.info[sym];
+  const box = $("detail");
+  if (!q || !info || !box.querySelector(".big")) return;
+  const m = info.metric;
+  const d = isNum(q.pc) ? q.c - q.pc : null;
+  const dp = isNum(q.pc) && q.pc ? d / q.pc * 100 : null;
+  const big = box.querySelector(".big");
+  big.textContent = fmtPrice(q.c);
+  if (flash) blink(big);
+  const chg = box.querySelector(".chg");
+  chg.textContent = fmtChg(d) + " (" + fmtPct(dp) + ")";
+  chg.className = "chg " + dirClass(d);
+  box.querySelector(".when").textContent = (q.liveAt ? "실시간 · " : "") + fmtTime(q.t) + " 기준";
+
+  paintRange("dayRange", "오늘 범위", q.l, q.h, q.c);
+  // 52주 최고·최저는 하루 한 번 바뀌는 값이라, 오늘 가격이 그걸 넘으면 넓혀서 보여 줌
+  const yl = isNum(m["52WeekLow"]) ? Math.min(m["52WeekLow"], q.c) : null;
+  const yh = isNum(m["52WeekHigh"]) ? Math.max(m["52WeekHigh"], q.c) : null;
+  const yearPos = paintRange("yearRange", "52주 범위", yl, yh, q.c);
+
+  box.querySelector(".summary").replaceChildren(...summarize(dp, yearPos, m));
+}
+
+/* =====================================================================
+   9. 간단한 분석 (한 줄 요약)
+   ---------------------------------------------------------------------
+   어려운 계산 없이 세 가지만 봅니다.
+     ① 오늘 얼마나 움직였나 (등락률)
+     ② 1년 동안의 최저~최고 사이 어디쯤인가 (52주 위치)
+     ③ 이익에 비해 주가가 비싼 편인가 (PER)
+   ===================================================================== */
+function summarize(dp, yearPos, m) {
+  const parts = [];
+  // ① 오늘 움직임
+  if (isNum(dp)) {
+    const a = Math.abs(dp).toFixed(1) + "%";
+    let s;
+    if (dp >= 3) s = "오늘 " + a + " 크게 올랐고";
+    else if (dp > 0.3) s = "오늘 " + a + " 올랐고";
+    else if (dp <= -3) s = "오늘 " + a + " 크게 내렸고";
+    else if (dp < -0.3) s = "오늘 " + a + " 내렸고";
+    else s = "오늘은 거의 그대로이고";
+    parts.push(["b", s, dirClass(dp)]);
+  }
+  // ② 52주 위치
+  if (yearPos !== null && yearPos !== undefined) {
+    const pct = Math.round(yearPos * 100);
+    let s;
+    if (yearPos >= 0.9) s = " 1년 중 최고가 근처(" + pct + "%)예요.";
+    else if (yearPos <= 0.1) s = " 1년 중 최저가 근처(" + pct + "%)예요.";
+    else if (yearPos >= 0.6) s = " 1년 범위의 위쪽(" + pct + "%)에 있어요.";
+    else if (yearPos <= 0.4) s = " 1년 범위의 아래쪽(" + pct + "%)에 있어요.";
+    else s = " 1년 범위의 가운데쯤(" + pct + "%)에 있어요.";
+    parts.push(["t", s]);
+  } else if (parts.length) parts.push(["t", " 1년 범위 자료는 없어요."]);
+  // ③ PER
+  const pe = m.peTTM ?? m.peBasicExclExtraTTM;
+  if (isNum(pe)) {
+    let s;
+    if (pe <= 0) s = " 최근 1년은 적자라 PER을 따지기 어려워요.";
+    else if (pe >= 40) s = " PER " + pe.toFixed(0) + "배로 이익에 비해 주가가 높은 편이에요.";
+    else if (pe < 15) s = " PER " + pe.toFixed(0) + "배로 이익에 비해 주가가 낮은 편이에요.";
+    else s = " PER " + pe.toFixed(0) + "배로 보통 수준이에요.";
+    parts.push(["t", s]);
+  }
+  if (!parts.length) return [document.createTextNode("분석할 자료가 아직 없어요.")];
+  return parts.map(([kind, text, cls]) => kind === "b" ? el("b", cls, text) : document.createTextNode(text));
+}
+
+/* =====================================================================
+   10. 주기 갱신 (실시간 연결의 빈틈 메우기)
+   ---------------------------------------------------------------------
+   - 보고 있는 종목: 20초마다 /quote (고가·저가·전일종가까지 맞춤)
+   - 관심종목: 실시간 연결이 끊겼을 때만 1분마다 한 바퀴
+   - 화면을 안 보고 있으면(다른 탭) 멈춰서 호출을 아낍니다.
+   ===================================================================== */
+let tick = 0;
+setInterval(() => {
+  if (document.hidden || !apiKey) return;
+  tick++;
+  if (state.current && state.info[state.current]) refreshQuote(state.current).then(() => paintLive(false)).catch(() => {});
+  const live = ws && ws.readyState === 1;
+  if (!live && tick % 3 === 0) state.watch.forEach((s) => refreshQuote(s).then(() => paintWatch(s, false)).catch(() => {}));
+}, 20000);
+
+/* 시장이 열려 있는지 (5분마다) */
+async function refreshMarket() {
+  try {
+    const s = await api("/stock/market-status", { exchange: "US" });
+    const ko = { "pre-market": "프리마켓", "regular": "정규장", "post-market": "애프터마켓" };
+    const c = $("mkt");
+    c.textContent = "미국장 " + (s.isOpen ? (ko[s.session] || "열림") : "닫힘" + (s.holiday ? " · " + s.holiday : ""));
+    c.classList.toggle("on", !!s.isOpen);
+  } catch (e) { $("mkt").textContent = "시장 상태 모름"; }
+}
+setInterval(() => { if (!document.hidden && apiKey) refreshMarket(); }, 300000);
+
+/* =====================================================================
+   11. 접속 키 상자, 알림
+   ===================================================================== */
+function showKeyBox(bad) {
+  $("keyBox").hidden = false;
+  if (bad && !FINNHUB_KEY) { store.del("live.key"); $("keyInput").placeholder = "키가 맞지 않아요. 다시 붙여넣기"; }
+}
+$("keyForm").onsubmit = (ev) => {
+  ev.preventDefault();
+  const k = $("keyInput").value.trim();
+  if (!k) return;
+  apiKey = k; store.set("live.key", k);
+  $("keyBox").hidden = true;
+  start();
+};
+function alertLine(text) { $("searchMeta").textContent = text; }
+
+/* =====================================================================
+   12. 시작
+   ===================================================================== */
+let searchTimer = null;
+$("q").addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(runSearch, 120); });
+$("q").addEventListener("keydown", (ev) => {
+  if (ev.key === "Enter") { const first = $("results").querySelector("button"); if (first) first.click(); }
+});
+
+async function start() {
+  renderWatch();
+  if (!apiKey) { showKeyBox(false); $("searchMeta").textContent = "접속 키를 넣으면 시작돼요."; setConn("키 필요", false); return; }
+  wsConnect();
+  refreshMarket();
+  loadSymbols().catch((e) => { $("searchMeta").textContent = "종목 목록을 못 받았어요: " + e.message + " (기호를 직접 입력하고 Enter를 눌러도 돼요)"; if (e.code === 401) showKeyBox(true); });
+  // 관심종목 시세 한 번씩 (실시간 체결이 오기 전까지 보여 줄 값 + 전일종가)
+  state.watch.forEach((s) => refreshQuote(s).then(() => paintWatch(s, false)).catch(() => {}));
+  // 주소에 #TSLA 처럼 종목이 있으면 그걸, 없으면 관심종목 첫 번째를 엶
+  const fromHash = decodeURIComponent(location.hash.slice(1)).toUpperCase();
+  openSymbol(fromHash || state.watch[0] || "AAPL");
+}
+start();
+</script>
+</body>
+</html>
