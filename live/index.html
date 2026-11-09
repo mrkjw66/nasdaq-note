@@ -72,6 +72,9 @@ header a { color: var(--muted); font-size: 13px; }
 #tapeBox { padding: 6px 8px; }
 #chartBox .tv { height: 460px; }
 #infoBox .tv { min-height: 170px; }
+/* 휴대폰에서는 TradingView '지금 가격'이 회사 이름을 여러 줄로 감싸서, 위젯이 정한 높이보다 길어져 가격이 잘려요.
+   좁은 화면에서만 칸을 넉넉히(240px) 늘려 가격과 등락까지 다 보이게 해요. */
+@media (max-width: 759px) { #info iframe { height: 240px !important; } }
 @media (max-width: 759px) { #chartBox .tv { height: 380px; } }
 .tradingview-widget-copyright { font-size: 11px; color: var(--muted); margin-top: 4px; }
 .tradingview-widget-copyright a { color: inherit; }
@@ -359,6 +362,7 @@ function mountSymbol(sym) {
   mountTV("chart", "advanced-chart", {
     symbol: tv, autosize: true, interval: "D", timezone: "Asia/Seoul",
     theme: tvTheme(), style: "1", locale: "kr",
+    backgroundColor: tvTheme() === "dark" ? "#251E17" : "#FBF7F0",   // 차트 바탕을 페이지 카드 색과 같게
     allow_symbol_change: false,          // 차트 안에서 종목을 바꾸면 아래 분석과 어긋나므로, 종목은 왼쪽 '종목 찾기'에서 바꿔요.
     hide_volume: false, calendar: false, support_host: "https://www.tradingview.com",
   });
