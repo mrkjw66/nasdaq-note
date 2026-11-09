@@ -697,7 +697,13 @@ table.cmp.live td.hc .jd { margin: 0; }
 @keyframes rtblink { 50% { opacity: .25; } }
 .tape.rt.off .tape-lab .dot { animation: none; background: var(--muted); }
 .tape.rt.off .tape-lab { color: var(--muted); }
-.rt-box { position: relative; height: 46px; overflow: hidden; } /* compact 띠의 글씨는 위쪽 46px 안에 다 들어가서, 그 아래 빈칸은 잘라 내요 */
+/* 상자 높이는 우리가 정하지 않고, TradingView가 정한 띠(iframe) 높이에 딱 맞춰요.
+   - 높이를 고정하면 띠가 두 줄로 바뀔 때 테두리에 걸려 잘리고(빨강),
+   - 최소 높이를 주면 띠보다 상자가 커서 빈칸이 생겨요(파랑). */
+.rt-box { position: relative; min-height: 0; }
+.rt-box.loaded { line-height: 0; }                  /* 글줄 높이 때문에 생기는 몇 px 빈틈도 없앰 */
+.rt-box .tradingview-widget-container, .rt-box .tradingview-widget-container__widget { margin: 0; padding: 0; }
+.rt-box:not(.loaded) { min-height: 40px; }        /* 불러오는 동안만 자리 잡기 */
 .rt-box .tradingview-widget-container { width: 100%; }
 .rt-box .rt-wait { position: absolute; inset: 0; display: flex; align-items: center; padding-left: 12px; font-size: 12.5px; color: var(--muted); }
 .rt-box.loaded .rt-wait { display: none; }
