@@ -688,7 +688,7 @@ table.cmp.live td.hc .jd { margin: 0; }
 /* 시세 띠 두 줄: 왼쪽 이름표로 '실시간'(TradingView)과 '종가 기준'(우리 자료)을 구분해요 */
 .tape { display: flex; align-items: center; }
 .tape-view { flex: 1; min-width: 0; overflow: hidden; }
-.tape-lab { flex: none; align-self: stretch; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-right: 1px solid var(--line); background: var(--surface); font-family: var(--font-body); font-size: 11.5px; font-weight: 600; white-space: nowrap; color: var(--muted); }
+.tape-lab { flex: none; width: 112px; box-sizing: border-box; align-self: stretch; display: flex; align-items: center; gap: 6px; padding: 0 10px; /* 두 띠의 이름표 폭을 같게 해서 세로선을 맞춤 */ border-right: 1px solid var(--line); background: var(--surface); font-family: var(--font-body); font-size: 11.5px; font-weight: 600; white-space: nowrap; color: var(--muted); }
 .tape-lab .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 .tape.rt { margin-bottom: 6px; align-items: stretch; }
 .rt-box iframe { display: block; height: 46px !important; }  /* regular(한 줄) 띠는 46px 안에 다 들어가요 */
@@ -709,7 +709,9 @@ table.cmp.live td.hc .jd { margin: 0; }
 .tape.rt.off .rt-box { height: auto; }
 .tape.rt.off .rt-wait { position: static; padding: 0 12px; }
 .rt-sw { flex: none; align-self: stretch; border: 0; border-left: 1px solid var(--line); background: var(--surface); color: var(--muted); font: inherit; font-size: 12px; padding: 0 10px; cursor: pointer; }
-.rt-src { font-weight: 400; color: var(--muted); }
+.tape.rt .tape-lab .lab2 { display: flex; flex-direction: column; line-height: 1.25; }  /* '실시간' 위, 'TradingView' 아래 두 줄 */
+.tape.rt .tape-lab .lab2 b { font-size: 11.5px; font-weight: 600; }
+.rt-src { font-weight: 400; font-size: 10px; color: var(--muted); }
 .rt-src:hover { color: var(--fg); }
 @media (prefers-reduced-motion: reduce) { .tape.rt .tape-lab .dot { animation: none; } }
 @media (prefers-reduced-motion: reduce) { .chev { transition: none; } .tape-run { animation: none; } }
@@ -994,7 +996,7 @@ details.stock summary .tick { display: none; }
     <p class="where" id="menuWhere" aria-live="polite"></p>
   </div>
   <div class="tape rt" id="rtTape">
-    <span class="tape-lab"><i class="dot"></i>실시간 <a class="rt-src" href="https://kr.tradingview.com/" target="_blank" rel="noopener nofollow">TradingView</a></span>
+    <span class="tape-lab"><i class="dot"></i><span class="lab2"><b>실시간</b><a class="rt-src" href="https://kr.tradingview.com/" target="_blank" rel="noopener nofollow">TradingView</a></span></span>
     <div class="tape-view rt-box" id="rtBox"><div class="rt-wait">실시간 시세 띠 불러오는 중…</div></div>
     <button type="button" class="rt-sw" id="rtSw" aria-pressed="true" title="실시간 시세 띠 켜기/끄기">끄기</button>
   </div>
