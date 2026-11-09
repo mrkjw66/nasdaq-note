@@ -257,6 +257,27 @@ const OURS = {
   TMUS: ["T-모바일 US", "미국 이동통신사"],
   QQQ: ["나스닥100 ETF(QQQ)", "나스닥 100 지수를 따라가는 ETF"],
   VOO: ["S&P500 ETF(VOO)", "S&P 500 지수를 따라가는 ETF"],
+  // ↓ 2026.11.9 추가 20개 (주식 14, ETF 4, 코인 2)
+  ORCL: ["오라클", "데이터베이스와 AI 클라우드 인프라"],
+  CRM: ["세일즈포스", "고객관리(CRM) 클라우드 소프트웨어"],
+  ADBE: ["어도비", "포토샵·PDF 등 디자인·문서 소프트웨어"],
+  NOW: ["서비스나우", "기업 업무 자동화 클라우드 플랫폼"],
+  INTU: ["인튜이트", "세금 신고·회계 소프트웨어(터보택스)"],
+  UBER: ["우버", "차량 호출과 음식 배달 플랫폼"],
+  ABNB: ["에어비앤비", "숙박 공유 플랫폼"],
+  JPM: ["JP모건 체이스", "미국 최대 은행"],
+  V: ["비자", "세계 최대 카드 결제망"],
+  UNH: ["유나이티드헬스", "미국 최대 건강보험사"],
+  XOM: ["엑슨모빌", "미국 최대 석유·가스 회사"],
+  HD: ["홈디포", "미국 최대 집수리·건축자재 매장"],
+  ISRG: ["인튜이티브 서지컬", "수술 로봇(다빈치)"],
+  NKE: ["나이키", "세계 최대 스포츠 신발·의류 브랜드"],
+  SCHD: ["미국 배당 ETF(SCHD)", "배당을 꾸준히 주는 미국 기업 100개 ETF"],
+  SMH: ["반도체 ETF(SMH)", "대형 반도체 기업 25개 ETF"],
+  TLT: ["미국 장기국채 ETF(TLT)", "만기 20년 넘는 미국 국채 ETF"],
+  GLD: ["금 ETF(GLD)", "금 가격을 따라가는 ETF"],
+  BTC: ["비트코인", "시가총액 1위 암호화폐(달러 가격)"],
+  ETH: ["이더리움", "스마트 계약 플랫폼 암호화폐(달러 가격)"],
 };
 
 /* TradingView는 '거래소:기호' 형식(NASDAQ:AAPL)으로 종목을 찾아요.
@@ -264,9 +285,18 @@ const OURS = {
    (VOO는 NYSE Arca 상장인데 TradingView에서는 AMEX라고 불러요.
     월마트·쇼피파이는 2025년에 나스닥으로 옮겼어요.)
    우리 목록에 없는 종목은 기호만 넘기면 TradingView가 알아서 거래소를 찾아요. */
-const NOT_NASDAQ = { KO: "NYSE", BAC: "NYSE", LLY: "NYSE", VOO: "AMEX" };
+const NOT_NASDAQ = {
+  KO: "NYSE", BAC: "NYSE", LLY: "NYSE", VOO: "AMEX",
+  ORCL: "NYSE", CRM: "NYSE", NOW: "NYSE", UBER: "NYSE", JPM: "NYSE", V: "NYSE", UNH: "NYSE", XOM: "NYSE", HD: "NYSE", NKE: "NYSE",
+  SCHD: "AMEX", GLD: "AMEX",   // NYSE Arca 상장 ETF (SMH·TLT는 나스닥 상장이라 여기 없음)
+};
+/* 코인은 거래소:기호 대신 TradingView의 달러 시세 기호를 그대로 써요.
+   'BTC'만 넘기면 같은 기호의 그레이스케일 ETF(주식)로 잡히기 때문이에요. */
+const TV_FIXED = { BTC: "BITSTAMP:BTCUSD", ETH: "BITSTAMP:ETHUSD" };
+const COINS = ["BTC", "ETH"];   // 24시간 거래라 '종가' 대신 'UTC 마감'이라고 적어요
 function tvSymbol(sym) {
   if (sym.includes(":")) return sym;                       // 이미 'NYSE:ORCL'처럼 쓴 경우
+  if (TV_FIXED[sym]) return TV_FIXED[sym];
   if (OURS[sym]) return (NOT_NASDAQ[sym] || "NASDAQ") + ":" + sym;
   return sym;
 }
@@ -517,7 +547,7 @@ function renderDetail() {
     const p = el("div", "price");
     const rate = state.latest.fx && state.latest.fx.usdkrw;
     p.append(el("span", "big", usd(c.close)), el("span", "chg " + dirClass(c.chg1d), pct(c.chg1d)),
-             el("span", "when", mmdd(c.date) + " 종가 " + won(c.close, rate)));
+             el("span", "when", mmdd(c.date) + (COINS.includes(sym) ? " UTC 마감 " : " 종가 ") + won(c.close, rate)));
     box.append(p);
   }
 
