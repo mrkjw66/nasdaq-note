@@ -1902,7 +1902,9 @@ details.stock summary .tick { display: none; }
   var ALL = D.concat(NEWT);
   function ready(d) {
     var f = d.f, ok = function (a) { return Array.isArray(a) && a.length === 3 && typeof a[0] === 'number' && typeof a[1] === 'number'; };
-    return !!(f && Array.isArray(f.ends) && f.ends.length === 3 && ok(f.rev) && ok(f.ni) && ok(f.oi) && ok(f.gp) && ok(f.fcf) && Array.isArray(f.ta) && Array.isArray(f.tl) && Array.isArray(f.eq) && Array.isArray(f.ocf) && typeof d.p.price === 'number' && typeof d.p.avg === 'number');
+    // 은행(JPM)·보험사(UNH)는 매출총이익이 원래 없어서 세 칸 모두 비어 있어도 카드를 보여줘요(표에는 '―'로 나와요).
+    var noGp = function (a) { return Array.isArray(a) && a.length === 3 && a.every(function (v) { return v === null; }); };
+    return !!(f && Array.isArray(f.ends) && f.ends.length === 3 && ok(f.rev) && ok(f.ni) && ok(f.oi) && (ok(f.gp) || noGp(f.gp)) && ok(f.fcf) && Array.isArray(f.ta) && Array.isArray(f.tl) && Array.isArray(f.eq) && Array.isArray(f.ocf) && typeof d.p.price === 'number' && typeof d.p.avg === 'number');
   }
 
 
@@ -1950,7 +1952,8 @@ details.stock summary .tick { display: none; }
     if (key === 'fcf') return (v < 0 ? '-' : '') + '$' + Math.abs(v).toFixed(Math.abs(v) < 10 ? 1 : 0) + 'B';
     return fmt(key, v);
   }
-  function usd2(v) { return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function usd2(v) { if (typeof v !== 'number' || !isFinite(v)) return '―';   // 값이 비어 있으면(예: 최고·최저 목표가 없음) '―'
+    return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
   function upside(d) { return (d.p.avg / d.p.price - 1) * 100; }
   function revg(d) { return (d.f.rev[0] / d.f.rev[1] - 1) * 100; }
 
@@ -2089,12 +2092,14 @@ details.stock summary .tick { display: none; }
       ['현재가', usd2(p.price)], ['평균 목표가', usd2(p.avg)], ['상승 여력', fmtPctS(up)],
       ['최고 목표가', usd2(p.hi)], ['최저 목표가', usd2(p.lo) + (p.lowFlag ? '*' : '')], ['의견', VIEW[p.view] || p.view]
     ].map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
-    return '<dl class="metrics">' + rows + '</dl>' +
+    // 최고·최저 목표가가 없으면(출처 자료가 오래돼 뺀 경우) 범위 막대를 그릴 수 없어서 안내 문장으로 바꿔요.
+    var hasRange = typeof lo === 'number' && typeof p.hi === 'number';
+    return '<dl class="metrics">' + rows + '</dl>' + (!hasRange ? '<p class="pt-legend">최고·최저 목표가 자료가 없어서 범위 막대는 생략했어요.</p>' :
       '<div class="pt-bar" role="img" aria-label="최저 ' + usd2(p.lo) + ', 평균 ' + usd2(p.avg) + ', 최고 ' + usd2(p.hi) + ', 현재가 ' + usd2(p.price) + '">' +
       '<span class="pt-track"></span><span class="pt-range" style="left:' + pos(lo) + '%;width:' + (pos(p.hi) - pos(lo)).toFixed(1) + '%"></span>' +
       '<span class="pt-now" style="left:' + pos(p.price) + '%"></span><span class="pt-avg" style="left:' + pos(p.avg) + '%"></span></div>' +
       '<div class="pt-lab"><span>' + usd2(p.lo) + (p.lowFlag ? '*' : '') + '</span><span>' + usd2(p.hi) + '</span></div>' +
-      '<p class="pt-legend">세로선은 현재가, 동그라미는 평균 목표가, 굵은 선은 최저~최고 범위예요.</p>' +
+      '<p class="pt-legend">세로선은 현재가, 동그라미는 평균 목표가, 굵은 선은 최저~최고 범위예요.</p>') +
       '<div class="stack" role="img" aria-label="매수 ' + p.b + ', 보유 ' + p.h + ', 매도 ' + p.s + '"><i class="b" style="width:' + (p.b / tot * 100) + '%"></i><i class="h" style="width:' + (p.h / tot * 100) + '%"></i><i class="s" style="width:' + (p.s / tot * 100) + '%"></i></div>' +
       '<p class="pt-legend">최근 3개월 의견은 매수 ' + p.b + ', 보유 ' + p.h + ', 매도 ' + p.s + '</p>';
   }
