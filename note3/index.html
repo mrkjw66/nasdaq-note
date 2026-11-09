@@ -680,7 +680,7 @@ table.cmp.live td.hc .jd { margin: 0; }
 .jrule { margin: 0 0 12px; }
 /* 시세 띠 */
 .tape { overflow: hidden; border-block: 1px solid var(--line); background: var(--surface); margin: 0 0 14px; }
-.tape-run { display: flex; gap: 34px; width: max-content; padding: 9px 34px 9px 0; animation: tape 48s linear infinite; font-family: var(--font-num); font-size: 16px; }
+.tape-run { display: flex; gap: 34px; width: max-content; padding: 9px 34px 9px 0; animation: tape 72s linear infinite; /* 숫자가 클수록 천천히 흘러가요 (48초 → 72초) */ font-family: var(--font-num); font-size: 16px; }
 .tape-run:empty { padding: 0; min-height: 40px; }
 .tape-run span { white-space: nowrap; }
 .tape-run b { color: var(--accent); font-weight: 400; margin-right: 8px; }
