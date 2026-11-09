@@ -691,19 +691,17 @@ table.cmp.live td.hc .jd { margin: 0; }
 .tape-lab { flex: none; align-self: stretch; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-right: 1px solid var(--line); background: var(--surface); font-family: var(--font-body); font-size: 11.5px; font-weight: 600; white-space: nowrap; color: var(--muted); }
 .tape-lab .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 .tape.rt { margin-bottom: 6px; align-items: stretch; }
-.rt-box iframe { display: block; height: 66px !important; }  /* TradingView는 띠 칸을 46px로 만들지만 휴대폰에선 안에 두 줄(이름/가격)을 그려 가격이 잘려요. 칸을 두 줄이 다 들어가는 높이로 늘림 */
+.rt-box iframe { display: block; height: 46px !important; }  /* regular(한 줄) 띠는 46px 안에 다 들어가요 */
 .tape.rt .tape-lab { color: var(--up); }
 .tape.rt .tape-lab .dot { background: var(--up); animation: rtblink 1.6s ease-in-out infinite; }
 @keyframes rtblink { 50% { opacity: .25; } }
 .tape.rt.off .tape-lab .dot { animation: none; background: var(--muted); }
 .tape.rt.off .tape-lab { color: var(--muted); }
-/* 상자 높이는 우리가 정하지 않고, TradingView가 정한 띠(iframe) 높이에 딱 맞춰요.
-   - 높이를 고정하면 띠가 두 줄로 바뀔 때 테두리에 걸려 잘리고(빨강),
-   - 최소 높이를 주면 띠보다 상자가 커서 빈칸이 생겨요(파랑). */
-.rt-box { position: relative; min-height: 0; }
-.rt-box.loaded { line-height: 0; }                  /* 글줄 높이 때문에 생기는 몇 px 빈틈도 없앰 */
-.rt-box .tradingview-widget-container, .rt-box .tradingview-widget-container__widget { margin: 0; padding: 0; }
-.rt-box:not(.loaded) { min-height: 40px; }        /* 불러오는 동안만 자리 잡기 */
+/* 실시간 띠 상자: TradingView 한 줄 띠(46px)에 딱 맞춰요.
+   - compact로 두면 휴대폰에서 종목마다 세 줄(이름/가격/등락)로 쌓여서 잘려요 → regular(한 줄)로 고정.
+   - 상자와 띠 칸을 둘 다 46px로 정해서, 테두리에 걸리지도 빈칸이 남지도 않게. */
+.rt-box { position: relative; height: 46px; overflow: hidden; line-height: 0; }
+.rt-box .rt-wait { line-height: 1.4; }
 .rt-box .tradingview-widget-container { width: 100%; }
 .rt-box .rt-wait { position: absolute; inset: 0; display: flex; align-items: center; padding-left: 12px; font-size: 12.5px; color: var(--muted); }
 .rt-box.loaded .rt-wait { display: none; }
@@ -2784,7 +2782,7 @@ details.stock summary .tick { display: none; }
       s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js'; s.async = true;
       s.textContent = JSON.stringify({
         symbols: ALL.map(function (d) { return { proName: tvSym(d), title: d.n }; }),
-        showSymbolLogo: true, isTransparent: true, displayMode: 'compact', colorTheme: shownTheme, locale: 'kr'
+        showSymbolLogo: true, isTransparent: true, displayMode: 'regular', colorTheme: shownTheme, locale: 'kr'
       });
       s.onerror = function () { var w = box.querySelector('.rt-wait'); if (w) w.textContent = 'TradingView에 연결하지 못했어요(광고 차단 기능을 확인해 주세요).'; };
       // 위젯 화면(iframe)이 생기면 '불러오는 중' 글자를 감춰요
