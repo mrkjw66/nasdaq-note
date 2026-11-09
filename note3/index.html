@@ -696,11 +696,11 @@ table.cmp.live td.hc .jd { margin: 0; }
 @keyframes rtblink { 50% { opacity: .25; } }
 .tape.rt.off .tape-lab .dot { animation: none; background: var(--muted); }
 .tape.rt.off .tape-lab { color: var(--muted); }
-.rt-box { position: relative; height: 46px; }
+.rt-box { position: relative; min-height: 46px; } /* 높이를 고정하지 않아야 위젯 글씨가 잘리거나 겹쳐 보이지 않아요 */
 .rt-box .rt-wait { position: absolute; inset: 0; display: flex; align-items: center; padding-left: 12px; font-size: 12.5px; color: var(--muted); }
 .rt-box.loaded .rt-wait { display: none; }
 .rt-box .tradingview-widget-copyright { display: none; } /* 출처는 이름표 옆 'TradingView' 글자로 표시 */
-.tape.rt.off .rt-box { height: auto; }
+.tape.rt.off .rt-box { min-height: 0; }
 .tape.rt.off .rt-wait { position: static; padding: 0 12px; }
 .rt-sw { flex: none; align-self: stretch; border: 0; border-left: 1px solid var(--line); background: var(--surface); color: var(--muted); font: inherit; font-size: 12px; padding: 0 10px; cursor: pointer; }
 .rt-src { font-weight: 400; color: var(--muted); }
@@ -2776,7 +2776,7 @@ details.stock summary .tick { display: none; }
       s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js'; s.async = true;
       s.textContent = JSON.stringify({
         symbols: ALL.map(function (d) { return { proName: tvSym(d), title: d.n }; }),
-        showSymbolLogo: true, isTransparent: true, displayMode: 'adaptive', colorTheme: shownTheme, locale: 'kr'
+        showSymbolLogo: true, isTransparent: true, displayMode: 'regular', colorTheme: shownTheme, locale: 'kr'
       });
       s.onerror = function () { var w = box.querySelector('.rt-wait'); if (w) w.textContent = 'TradingView에 연결하지 못했어요(광고 차단 기능을 확인해 주세요).'; };
       // 위젯 화면(iframe)이 생기면 '불러오는 중' 글자를 감춰요

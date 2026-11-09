@@ -348,7 +348,7 @@ function mountTV(boxId, kind, config) {
 function mountTape() {
   mountTV("tape", "ticker-tape", {
     symbols: state.watch.map((t) => ({ proName: tvSymbol(t), title: OURS[t] ? OURS[t][0] : t })),
-    showSymbolLogo: true, isTransparent: true, displayMode: "adaptive",
+    showSymbolLogo: true, isTransparent: true, displayMode: "regular",   // 한 줄로(좁은 화면에서도 두 줄로 바뀌지 않게)
     colorTheme: tvTheme(), locale: "kr",
   });
 }
