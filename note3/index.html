@@ -691,7 +691,7 @@ table.cmp.live td.hc .jd { margin: 0; }
 .tape-lab { flex: none; align-self: stretch; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-right: 1px solid var(--line); background: var(--surface); font-family: var(--font-body); font-size: 11.5px; font-weight: 600; white-space: nowrap; color: var(--muted); }
 .tape-lab .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 .tape.rt { margin-bottom: 6px; align-items: stretch; }
-.rt-box iframe { display: block; }
+.rt-box iframe { display: block; height: 66px !important; }  /* TradingView는 띠 칸을 46px로 만들지만 휴대폰에선 안에 두 줄(이름/가격)을 그려 가격이 잘려요. 칸을 두 줄이 다 들어가는 높이로 늘림 */
 .tape.rt .tape-lab { color: var(--up); }
 .tape.rt .tape-lab .dot { background: var(--up); animation: rtblink 1.6s ease-in-out infinite; }
 @keyframes rtblink { 50% { opacity: .25; } }
