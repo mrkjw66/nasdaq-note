@@ -2814,7 +2814,7 @@ details.stock summary .tick { display: none; }
     el.innerHTML = row ? row + row : '';
     // 종목 수가 늘어도 같은 빠르기로 흐르게: 띠 길이(절반 = 한 바퀴) ÷ TAPE_SPEED = 한 바퀴 도는 초.
     // TAPE_SPEED는 1초에 몇 픽셀 흐를지예요. 작을수록 천천히(예: 20 = 아주 천천히, 60 = 빠르게).
-    var TAPE_SPEED = 30;
+    var TAPE_SPEED = 60;   // 11/10 저녁: 30은 너무 느리다고 해서 두 배로
     if (row) requestAnimationFrame(function () {
       var half = el.scrollWidth / 2;
       if (half > 0) el.style.animationDuration = Math.max(20, Math.round(half / TAPE_SPEED)) + 's';
