@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><script src="../js/slow-tape.js" defer></script>
+</head><body>
 <title>나스닥 노트 3</title>
 <meta name="description" content="미국 주식 공부 노트: 시세, 뉴스, 종목 카드, 배당 달력, 계산기">
 <script>try{var __t=localStorage.getItem('noteTheme');if(__t==='light'||__t==='dark')document.documentElement.setAttribute('data-note-theme',__t);}catch(e){}</script>
@@ -691,7 +692,7 @@ table.cmp.live td.hc .jd { margin: 0; }
 .tape-lab { flex: none; width: 112px; box-sizing: border-box; align-self: stretch; display: flex; align-items: center; gap: 6px; padding: 0 10px; /* 두 띠의 이름표 폭을 같게 해서 세로선을 맞춤 */ border-right: 1px solid var(--line); background: var(--surface); font-family: var(--font-body); font-size: 11.5px; font-weight: 600; white-space: nowrap; color: var(--muted); }
 .tape-lab .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 .tape.rt { margin-bottom: 6px; align-items: stretch; }
-.rt-box iframe { display: block; height: 46px !important; }  /* regular(한 줄) 띠는 46px 안에 다 들어가요 */
+.rt-box iframe { display: block; }  /* Tickers 위젯이 정한 높이 그대로 */
 .tape.rt .tape-lab { color: var(--up); }
 .tape.rt .tape-lab .dot { background: var(--up); animation: rtblink 1.6s ease-in-out infinite; }
 @keyframes rtblink { 50% { opacity: .25; } }
@@ -700,13 +701,13 @@ table.cmp.live td.hc .jd { margin: 0; }
 /* 실시간 띠 상자: TradingView 한 줄 띠(46px)에 딱 맞춰요.
    - compact로 두면 휴대폰에서 종목마다 세 줄(이름/가격/등락)로 쌓여서 잘려요 → regular(한 줄)로 고정.
    - 상자와 띠 칸을 둘 다 46px로 정해서, 테두리에 걸리지도 빈칸이 남지도 않게. */
-.rt-box { position: relative; height: 46px; overflow: hidden; line-height: 0; }
+.rt-box { position: relative; min-height: var(--rt-h, 72px); overflow: hidden; line-height: 0; }  /* --rt-h: 실시간 칸 높이(위젯 높이에 맞춰 조절) */
 .rt-box .rt-wait { line-height: 1.4; }
 .rt-box .tradingview-widget-container { width: 100%; }
 .rt-box .rt-wait { position: absolute; inset: 0; display: flex; align-items: center; padding-left: 12px; font-size: 12.5px; color: var(--muted); }
 .rt-box.loaded .rt-wait { display: none; }
 .rt-box .tradingview-widget-copyright { display: none; } /* 출처는 이름표 옆 'TradingView' 글자로 표시 */
-.tape.rt.off .rt-box { height: 46px; }  /* 꺼도 켰을 때와 같은 높이 → 화면이 덜컥 움직이지 않음 */
+.tape.rt.off .rt-box { height: var(--rt-h, 72px); }  /* 꺼도 켰을 때와 비슷한 높이 → 화면이 덜컥 움직이지 않음 */
 .tape.rt.off .rt-wait { font-size: 12px; }   /* 글씨는 세로 가운데(위의 flex 정렬 그대로) */
 .tape.rt.off .rt-sw { color: var(--accent); font-weight: 600; }  /* '켜기'는 눈에 띄게 */
 .rt-sw { flex: none; align-self: stretch; border: 0; border-left: 1px solid var(--line); background: var(--surface); color: var(--muted); font: inherit; font-size: 12px; padding: 0 10px; cursor: pointer; }
@@ -2807,6 +2808,8 @@ details.stock summary .tick { display: none; }
   }
 
   /* ---------- 실시간 시세 띠 (TradingView 무료 위젯) ----------
+     - 11/10: TradingView 흐르는 띠는 속도를 못 바꿔서 너무 빨랐어요. 이제 ../js/slow-tape.js가
+       움직이지 않는 시세 칸(Tickers)을 이어 붙여 천천히 흘려요(속도 = 그 파일의 SPEED).
      - 우리 종목 목록(ALL)을 TradingView 형식(거래소:기호)으로 바꿔 넘겨요.
        tv가 적힌 코인(BTC·ETH)은 그 기호 그대로, ex가 적힌 종목은 그 거래소(NYSE 또는 AMEX = NYSE Arca),
        VOO는 TradingView에서 AMEX, 나머지는 NASDAQ.
@@ -2829,23 +2832,21 @@ details.stock summary .tick { display: none; }
       return (d.ex || 'NASDAQ') + ':' + d.t;    // ex가 없으면 나스닥 상장
     }
     function isOn() { try { return localStorage.getItem('noteRtTape') !== 'off'; } catch (e) { return true; } }
+    var tape = null;   // 지금 그려진 띠(지울 때 씀)
+    function unmount() { if (tape) { tape.destroy(); tape = null; } }
     function mount() {
       shownTheme = theme();
+      unmount();
       box.classList.remove('loaded');
       box.innerHTML = '<div class="rt-wait">실시간 시세 띠 불러오는 중…</div>';
-      var holder = document.createElement('div'); holder.className = 'tradingview-widget-container';
-      var inner = document.createElement('div'); inner.className = 'tradingview-widget-container__widget';
-      var s = document.createElement('script');
-      s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js'; s.async = true;
-      s.textContent = JSON.stringify({
+      if (!window.SlowTape) { box.querySelector('.rt-wait').textContent = '실시간 띠 파일을 불러오지 못했어요. 새로고침해 주세요.'; return; }
+      // 천천히 흐르는 띠: 움직이지 않는 TradingView 시세 칸을 이어 붙이고, 흐르는 속도는 js/slow-tape.js의 SPEED로 정해요.
+      tape = window.SlowTape.mount(box, {
         symbols: ALL.map(function (d) { return { proName: tvSym(d), title: d.n }; }),
-        showSymbolLogo: true, isTransparent: true, displayMode: 'regular', colorTheme: shownTheme, locale: 'kr'
+        theme: shownTheme,
+        onLoaded: function () { box.classList.add('loaded'); },
+        onError: function () { var w = box.querySelector('.rt-wait'); if (w) w.textContent = 'TradingView에 연결하지 못했어요(광고 차단 기능을 확인해 주세요).'; }
       });
-      s.onerror = function () { var w = box.querySelector('.rt-wait'); if (w) w.textContent = 'TradingView에 연결하지 못했어요(광고 차단 기능을 확인해 주세요).'; };
-      // 위젯 화면(iframe)이 생기면 '불러오는 중' 글자를 감춰요
-      var ob = new MutationObserver(function () { if (holder.querySelector('iframe')) { box.classList.add('loaded'); ob.disconnect(); } });
-      ob.observe(holder, { childList: true, subtree: true });
-      holder.appendChild(inner); holder.appendChild(s); box.appendChild(holder);
     }
     function apply() {
       var on = isOn();
@@ -2854,7 +2855,7 @@ details.stock summary .tick { display: none; }
       sw.setAttribute('aria-pressed', on ? 'true' : 'false');
       if (!ready) return;
       if (on) mount();
-      else { shownTheme = null; box.classList.remove('loaded'); box.innerHTML = '<div class="rt-wait">실시간 띠 꺼짐</div>'; }
+      else { unmount(); shownTheme = null; box.classList.remove('loaded'); box.innerHTML = '<div class="rt-wait">실시간 띠 꺼짐</div>'; }
     }
     sw.addEventListener('click', function () {
       try { localStorage.setItem('noteRtTape', isOn() ? 'off' : 'on'); } catch (e) {}
