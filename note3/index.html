@@ -681,7 +681,7 @@ table.cmp.live td.hc .jd { margin: 0; }
 .jrule { margin: 0 0 12px; }
 /* 시세 띠 */
 .tape { overflow: hidden; border-block: 1px solid var(--line); background: var(--surface); margin: 0 0 14px; }
-.tape-run { display: flex; gap: 34px; width: max-content; padding: 9px 34px 9px 0; animation: tape 72s linear infinite; /* 숫자가 클수록 천천히 흘러가요 (48초 → 72초) */ font-family: var(--font-num); font-size: 16px; }
+.tape-run { display: flex; gap: 34px; width: max-content; padding: 9px 34px 9px 0; animation: tape 72s linear infinite; /* 72초는 처음 값일 뿐, 실제 시간은 renderTape가 띠 길이로 계산(1초에 30px) */ font-family: var(--font-num); font-size: 16px; }
 .tape-run:empty { padding: 0; min-height: 40px; }
 .tape-run span { white-space: nowrap; }
 .tape-run b { color: var(--accent); font-weight: 400; margin-right: 8px; }
@@ -2805,6 +2805,13 @@ details.stock summary .tick { display: none; }
         (c === null ? '' : ' <i style="font-style:normal;color:var(' + (c >= 0 ? '--up' : '--down') + ')">' + (c >= 0 ? '+' : '') + c.toFixed(2) + '%</i>') + '</span>';
     }).join('');
     el.innerHTML = row ? row + row : '';
+    // 종목 수가 늘어도 같은 빠르기로 흐르게: 띠 길이(절반 = 한 바퀴) ÷ TAPE_SPEED = 한 바퀴 도는 초.
+    // TAPE_SPEED는 1초에 몇 픽셀 흐를지예요. 작을수록 천천히(예: 20 = 아주 천천히, 60 = 빠르게).
+    var TAPE_SPEED = 30;
+    if (row) requestAnimationFrame(function () {
+      var half = el.scrollWidth / 2;
+      if (half > 0) el.style.animationDuration = Math.max(20, Math.round(half / TAPE_SPEED)) + 's';
+    });
   }
 
   /* ---------- 실시간 시세 띠 (TradingView 무료 위젯) ----------
