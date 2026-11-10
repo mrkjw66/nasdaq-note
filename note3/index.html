@@ -1954,6 +1954,14 @@ details.stock summary .tick { display: none; }
   }
   function usd2(v) { if (typeof v !== 'number' || !isFinite(v)) return '―';   // 값이 비어 있으면(예: 최고·최저 목표가 없음) '―'
     return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  /* 옛 날짜 표시: 시세 자료의 기준일(asOf)보다 이 종목의 날짜가 이르면 'M/D'를 돌려줘요.
+     작은 종목·ETF는 그날 종가가 늦게 잡혀서 앞 거래일 값이 남아 있을 수 있거든요(오후 보충 실행에서 채워져요). */
+  function oldMD(q) {
+    var a = MKT && MKT.asOf;
+    if (!q || !q.date || !a || q.date >= a) return '';
+    var p = q.date.split('-'); return Number(p[1]) + '/' + Number(p[2]);
+  }
+  function oldTag(q) { var m = oldMD(q); return m ? ' <small style="color:var(--muted);font-weight:400;font-size:.85em" title="아직 새 종가를 못 받아 이 날짜 값이에요">' + m + '</small>' : ''; }
   function upside(d) { return (d.p.avg / d.p.price - 1) * 100; }
   function revg(d) { return (d.f.rev[0] / d.f.rev[1] - 1) * 100; }
 
@@ -2737,7 +2745,7 @@ details.stock summary .tick { display: none; }
       if (head) html += '<div class="g" style="left:' + gr.x + 'px;top:' + gr.y + 'px;width:' + gr.w + 'px">' + gr.it.g + '</div>';
       squarify(groups[gr.it.g], gr.x, gr.y + head, gr.w, gr.h - head).forEach(function (q) {
         var d = q.it.d, v = liveVal(d, stkKey);
-        html += tile(q, d.n.replace(/ A\(구글\)$/, ''), v === null ? '―' : fmtPctS(v), tmColor(v, STKP[stkKey][1]), 'data-t="' + d.t + '"', d.t, typeof priceOf(d).v === 'number' ? usd2(priceOf(d).v) : '');
+        html += tile(q, d.n.replace(/ A\(구글\)$/, ''), (v === null ? '―' : fmtPctS(v)) + (oldMD(LIVE && LIVE[d.t]) ? ' · ' + oldMD(LIVE[d.t]) : ''), tmColor(v, STKP[stkKey][1]), 'data-t="' + d.t + '"', d.t, typeof priceOf(d).v === 'number' ? usd2(priceOf(d).v) : '');
       });
     });
     el.innerHTML = html;
@@ -2748,7 +2756,7 @@ details.stock summary .tick { display: none; }
     var d = by(b.getAttribute('data-t')), q = LIVE && LIVE[d.t], v = liveVal(d, stkKey), cap = capOf(d);
     $('tmStkTip').innerHTML = '<b>' + d.n + '</b> <span style="color:var(--muted)">' + (SECTOR_OF[d.t] || '') + '</span><br>' + STKP[stkKey][0] + ' ' +
       (v === null ? '값 없음' : '<b class="' + (v < 0 ? 'down' : 'up') + '">' + fmtPctS(v) + '</b>') +
-      ', ' + (priceOf(d).live ? '종가 ' : '가격(TipRanks 10/26~29) ') + usd2(priceOf(d).v) +
+      ', ' + (priceOf(d).live ? '종가 ' + (oldMD(q) ? '(' + oldMD(q) + ' 기준) ' : '') : '가격(TipRanks 10/26~29) ') + usd2(priceOf(d).v) +
       (cap ? ', 시가총액 ' + fmtUsdB(cap) + ' 달러' : '') +
       '<br><button type="button" class="go" data-go="' + d.t + '">종목 카드 열기</button>';
   });
@@ -2801,7 +2809,7 @@ details.stock summary .tick { display: none; }
       if (!q || typeof q.close !== 'number' || !/^[A-Z.\-]{1,8}$/.test(t)) return '';
       var c = typeof q.chg1d === 'number' ? q.chg1d : null;
       return '<span><b>' + t + '</b>' + q.close.toFixed(2) +
-        (c === null ? '' : ' <i style="font-style:normal;color:var(' + (c >= 0 ? '--up' : '--down') + ')">' + (c >= 0 ? '+' : '') + c.toFixed(2) + '%</i>') + '</span>';
+        (c === null ? '' : ' <i style="font-style:normal;color:var(' + (c >= 0 ? '--up' : '--down') + ')">' + (c >= 0 ? '+' : '') + c.toFixed(2) + '%</i>') + oldTag(q) + '</span>';
     }).join('');
     el.innerHTML = row ? row + row : '';
     // 종목 수가 늘어도 같은 빠르기로 흐르게: 띠 길이(절반 = 한 바퀴) ÷ TAPE_SPEED = 한 바퀴 도는 초.
@@ -2918,7 +2926,7 @@ details.stock summary .tick { display: none; }
       });
       h += '</tr></thead><tbody>';
       rows.forEach(function (d) {
-        h += '<tr data-go="' + d.t + '"><td>' + d.n + '</td>' + LCOLS.map(function (c) { return cell(get(d, c.k), c); }).join('') + '</tr>';
+        h += '<tr data-go="' + d.t + '"><td>' + d.n + oldTag(items && items[d.t]) + '</td>' + LCOLS.map(function (c) { return cell(get(d, c.k), c); }).join('') + '</tr>';
       });
       el.innerHTML = h + '</tbody>';
     }
@@ -2996,7 +3004,7 @@ details.stock summary .tick { display: none; }
   function rowResult(l) {
     if (!valid(l)) return '<div class="nm"><span>수량과 평균 매수가를 넣으면 계산해요.</span></div><div class="val"></div>';
     var r = calc(l);
-    return '<div class="nm"><b>' + r.d.n + '</b><span>' + (r.c !== null ? '종가 ' + usd2(r.c) : '종가 미확인, 참고가 ' + usd2(r.price)) +
+    return '<div class="nm"><b>' + r.d.n + '</b><span>' + (r.c !== null ? '종가 ' + usd2(r.c) + (oldMD(r.q) ? ' (' + oldMD(r.q) + ' 기준)' : '') : '종가 미확인, 참고가 ' + usd2(r.price)) +
       (r.q && typeof r.q.chg1d === 'number' ? ', <span class="' + (r.q.chg1d < 0 ? 'down' : 'up') + '" style="display:inline">하루 ' + fmtPctS(r.q.chg1d) + '</span>' : '') + '</span></div>' +
       '<div class="val"><b>' + (r.vK !== null ? won(r.vK) : usd2(r.vUsd)) + '</b><span class="' + (r.pct < 0 ? 'down' : 'up') + '">' + (r.plK !== null ? wonS(r.plK) + ' ' : '') + fmtPctS(r.pct) + '</span>' +
       (fxNow() && l.fx ? '<small>주가 ' + fmtPctS((r.price / l.avg - 1) * 100) + ', 환율 ' + fmtPctS((fxNow() / l.fx - 1) * 100) + '</small>' : '') + '</div>';
