@@ -149,7 +149,6 @@ footer a { color: inherit; }
   .grid2 { display: grid; grid-template-columns: 340px 1fr; gap: 14px; align-items: start; }
 }
 </style>
-<script src="../js/slow-tape.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -383,21 +382,11 @@ function mountTV(boxId, kind, config) {
 }
 
 /* 맨 위 시세 띠: 관심종목 전체를 실시간으로 */
-/* TradingView 흐르는 띠는 속도를 못 바꿔서 너무 빨랐어요(11/10).
-   이제 ../js/slow-tape.js가 움직이지 않는 시세 칸(Tickers)을 이어 붙이고 천천히 흘려요.
-   속도는 그 파일 맨 위의 SPEED 숫자로 바꿔요. 손으로 밀면 몇 초 멈췄다가 다시 흘러요. */
-let tapeCtl = null;
 function mountTape() {
-  const box = $("tape");
-  if (tapeCtl) { tapeCtl.destroy(); tapeCtl = null; }
-  box.classList.remove("loaded");
-  box.replaceChildren(el("div", "wait", "실시간 시세 띠 불러오는 중…"));
-  if (!window.SlowTape) { box.querySelector(".wait").textContent = "실시간 띠 파일을 불러오지 못했어요. 새로고침해 주세요."; return; }
-  tapeCtl = window.SlowTape.mount(box, {
+  mountTV("tape", "ticker-tape", {
     symbols: state.watch.map((t) => ({ proName: tvSymbol(t), title: OURS[t] ? OURS[t][0] : t })),
-    theme: tvTheme(),
-    onLoaded: () => box.classList.add("loaded"),
-    onError: () => { box.querySelector(".wait").textContent = "TradingView에 연결하지 못했어요. 광고 차단 기능이 막고 있지 않은지 확인해 주세요."; },
+    showSymbolLogo: true, isTransparent: true, displayMode: "regular",   // 한 줄로(좁은 화면에서도 두 줄로 바뀌지 않게)
+    colorTheme: tvTheme(), locale: "kr",
   });
 }
 /* 고른 종목의 지금 가격 + 차트 */
