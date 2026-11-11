@@ -84,9 +84,21 @@ button:focus-visible, summary:focus-visible, input:focus-visible { outline: 2px 
 
 section.panel { padding-top: 24px; }
 /* ---------- 화면 전환: 새 탭이 살짝 아래에서 올라오며 나타나요 ---------- */
-@keyframes panelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes panelIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+/* 화면 전환 기능(View Transitions)이 있는 브라우저: 바뀌기 전 화면은 서서히 사라지고, 새 화면은 아래에서 올라오며 나타나요.
+   위쪽 머리·시세 띠까지 화면 전체가 한 번에 움직여서 '확' 바뀌는 느낌이 없어요. */
+@keyframes vtOut { to { opacity: 0; transform: scale(.985); } }
+@keyframes vtIn { from { opacity: 0; transform: translateY(22px); } }
+::view-transition-old(root) { animation: vtOut .2s ease-in both; }
+::view-transition-new(root) { animation: vtIn .42s cubic-bezier(.2, .75, .2, 1) both; }
+/* 홈 칸을 누르면: 누른 칸이 그 자리에서 커지며 사라지고, 그 사이로 새 탭 화면이 올라와요 */
+@keyframes vtGrow { to { opacity: 0; transform: scale(1.35); } }
+::view-transition-group(hm-open) { animation-duration: .38s; }
+::view-transition-old(hm-open) { animation: vtGrow .38s cubic-bezier(.2, .7, .2, 1) both; }
+html.vt section.panel:not([hidden]), html.vt #p-home:not([hidden]) .hm-t { animation: none; }   /* 전환 기능이 있으면 그걸로 움직이니 겹치지 않게 */
+@media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
 @keyframes tileIn { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
-section.panel:not([hidden]) { animation: panelIn .26s cubic-bezier(.2, .7, .2, 1) backwards;   /* 끝나면 흔적 없이(고정 위치 요소가 어긋나지 않게) */ }
+section.panel:not([hidden]) { animation: panelIn .34s cubic-bezier(.2, .7, .2, 1) backwards;   /* 끝나면 흔적 없이(고정 위치 요소가 어긋나지 않게) */ }
 /* 홈 네 칸은 차례로(0.04초 간격) 떠올라요 */
 #p-home:not([hidden]) .hm-t { animation: tileIn .34s cubic-bezier(.2, .7, .2, 1) backwards;   /* 끝나면 흔적 없이(고정 위치 요소가 어긋나지 않게) */ }
 #p-home:not([hidden]) .hm-big { animation-delay: .03s; }
@@ -2555,6 +2567,9 @@ details.stock summary .tick { display: none; }
   ];
   var tabs = []; GROUPS.forEach(function (g) { g.subs.forEach(function (s) { tabs.push(s[0]); }); });
   var GUEST = false, PRIVATE_TABS = [];
+  // 화면 전환 준비: VT_BUSY = 지금 전환 중인지, HM_OPEN = 홈에서 누른 칸(그 칸이 커지며 열려요), RM = '동작 줄이기' 설정
+  var VT_BUSY = false, HM_OPEN = null, RM = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+  if (document.startViewTransition) document.documentElement.classList.add('vt');
   var CUR = null;
   function groupOf(name) { for (var i = 0; i < GROUPS.length; i++) { var g = GROUPS[i]; if (g.subs.some(function (s) { return s[0] === name; })) return g; } return null; }
   function subLabel(name) { var g = groupOf(name); return g ? g.subs.filter(function (s) { return s[0] === name; })[0][1] : ''; }
@@ -2572,6 +2587,19 @@ details.stock summary .tick { display: none; }
     if (on) { renderMenu(); var b = $('menuList').querySelector('[aria-current]') || $('menuList').querySelector('button'); if (b) b.focus(); }
   }
   function show(name, noScroll) {
+    // 처음 열 때(noScroll)는 그냥 보여 주고, 그다음부터는 바뀌기 전·후 화면을 이어서 부드럽게 움직여요.
+    if (!noScroll && !VT_BUSY && document.startViewTransition && !RM.matches && CUR !== null) {
+      VT_BUSY = true;
+      var open = HM_OPEN; HM_OPEN = null;
+      if (open) open.style.viewTransitionName = 'hm-open';          // 누른 칸 = 전환의 출발점
+      var vt = document.startViewTransition(function () {
+        if (open) open.style.viewTransitionName = '';               // 새 화면에는 짝이 없어서, 누른 칸은 커지며 사라져요
+        show(name, noScroll);                                       // 실제로 탭을 바꾸는 부분(아래 원래 코드)
+      });
+      var done = function () { VT_BUSY = false; };
+      vt.finished.then(done, done);
+      return;
+    }
     var g0 = GROUPS.filter(function (g) { return g.id === name; })[0];
     if (g0 && tabs.indexOf(name) < 0) name = g0.subs[0][0];
     if (tabs.indexOf(name) < 0) name = GUEST ? 'market' : 'mine';
