@@ -27,7 +27,7 @@ html, body { height: 100%; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.4 var(--font); word-break: keep-all;
   padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
 /* 한 화면: 화면 높이에 맞춰 위(머리) · 가운데(칸 3개) · 아래(뉴스) 순서로 쌓아요. */
-.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px;
   height: calc(100dvh - max(12px, env(safe-area-inset-top)) - max(10px, env(safe-area-inset-bottom))); min-height: 540px; }
 .num { font-family: var(--num); font-variant-numeric: tabular-nums; }
 a { color: inherit; }
@@ -45,17 +45,17 @@ h1 { font-size: 21px; font-weight: 700; letter-spacing: -0.03em; margin: 0; line
 .links a.main { background: var(--btn-bg); color: var(--btn-fg); border-color: var(--btn-bg); }
 
 /* 칸 공통 */
-.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 11px 12px; min-width: 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
-.tile h2 { font-size: 13px; font-weight: 700; margin: 0 0 6px; display: flex; align-items: center; gap: 6px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 15px; cursor: pointer; transition: border-color .15s, transform .15s; min-width: 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+.tile h2 { font-size: 13.5px; font-weight: 700; margin: 0 0 8px; display: flex; align-items: center; gap: 6px; }
 .tile h2 svg { width: 15px; height: 15px; color: var(--accent); flex: none; }
 .tile h2 small { margin-left: auto; font-weight: 400; color: var(--muted); font-size: 11px; }
 
 /* 2) 가운데: 왼쪽 큰 칸 + 오른쪽 위·아래 칸 */
-.mid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 10px; }
+.mid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 14px; flex: none; }   /* 가운데는 내용 높이만큼, 남는 높이는 뉴스 칸이 써요 */
 .mid .big { grid-row: 1 / 3; }
 
 /* 주요 종목 등락: 이름·등락률 + 막대 */
-.mv { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.mv { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: space-evenly; flex: 1; min-height: 0; }
 .mv li { min-width: 0; }
 .mv .l { display: flex; justify-content: space-between; gap: 6px; font-size: 13px; }
 .mv .l span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -64,7 +64,7 @@ h1 { font-size: 21px; font-weight: 700; letter-spacing: -0.03em; margin: 0; line
 .mv .gap { height: 4px; }
 
 /* 시장 상황: 이름 · 눈금 막대 · 등락 */
-.mk { margin: 0; display: grid; grid-template-columns: auto 1fr auto; gap: 5px 8px; align-items: center; font-size: 13px; }
+.mk { margin: 0; display: grid; grid-template-columns: auto 1fr auto; gap: 4px 8px; align-items: center; align-content: space-evenly; flex: 1; font-size: 13px; }
 .mk dt { color: var(--muted); white-space: nowrap; }
 .mk dd { margin: 0; }
 .meter { position: relative; height: 6px; border-radius: 3px; background: var(--line); }
@@ -72,7 +72,7 @@ h1 { font-size: 21px; font-weight: 700; letter-spacing: -0.03em; margin: 0; line
 .meter i { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
 
 /* 일정: 달력 모양 날짜 + 두 줄 */
-.cal { display: flex; gap: 8px; align-items: flex-start; }
+.cal { display: flex; gap: 10px; align-items: center; flex: 1; }
 .cal .pg { flex: none; width: 40px; border-radius: 8px; overflow: hidden; text-align: center; border: 1px solid var(--line); background: var(--bg); }
 .cal .pg b { display: block; background: var(--accent); color: var(--btn-fg); font-size: 10.5px; padding: 1px 0; }
 .cal .pg span { display: block; font-family: var(--num); font-size: 17px; font-weight: 500; line-height: 1.35; }
@@ -83,6 +83,12 @@ h1 { font-size: 21px; font-weight: 700; letter-spacing: -0.03em; margin: 0; line
 
 /* 3) 뉴스 요약: 남은 높이를 모두 써요 */
 .news { flex: 1; }
+/* 칸을 누를 수 있다는 표시: 제목 옆 › 와 눌렀을 때 테두리 색 */
+.tile:hover { border-color: var(--accent); }
+.tile:active { transform: scale(.99); }
+.tile h2 a { text-decoration: none; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.tile h2 a::after { content: '›'; color: var(--muted); font-size: 16px; line-height: 1; }
+.tile h2 a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .brief { font-size: 13px; margin: 0 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .nl { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; overflow: hidden; flex: 1; min-height: 0; }   /* 뉴스 칸 남은 높이만큼만 */
 .nl li { display: grid; grid-template-columns: 4px auto 1fr auto; gap: 8px; align-items: center; font-size: 13px; min-width: 0; }
@@ -97,14 +103,16 @@ footer { font-size: 10.5px; color: var(--muted); text-align: center; white-space
 @media (max-width: 400px) {
   .links a { padding: 6px 8px; font-size: 12px; }
   h1 { font-size: 19px; }
-  .tile { padding: 9px 10px; }
+  .tile { padding: 11px 12px; }
+  .wrap, .mid { gap: 11px; }
 }
 @media (min-width: 700px) {
   body { font-size: 15px; }
   .logo { width: 46px; height: 46px; }
   h1 { font-size: 27px; }
-  .tile { padding: 14px 16px; }
+  .tile { padding: 18px 20px; }
   .tile h2 { font-size: 14.5px; }
+  .wrap, .mid { gap: 18px; }
   .mv .l, .mk, .nl li { font-size: 14px; }
   .cal ul { font-size: 13.5px; }
 }
@@ -132,24 +140,24 @@ footer { font-size: 10.5px; color: var(--muted); text-align: center; white-space
 
   <!-- 2) 가운데 칸 3개 -->
   <div class="mid">
-    <section class="tile big" aria-labelledby="h-mv">
-      <h2 id="h-mv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12 L6 7 L9 10 L14 4"/><path d="M10 4 H14 V8"/></svg>주요 종목 등락</h2>
+    <section class="tile big" data-go="note3/#stocks" aria-labelledby="h-mv">
+      <h2 id="h-mv"><a href="note3/#stocks"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12 L6 7 L9 10 L14 4"/><path d="M10 4 H14 V8"/></svg>종목 등락</a></h2>
       <ul class="mv" id="mv"><li class="flat">불러오는 중이에요.</li></ul>
     </section>
-    <section class="tile" aria-labelledby="h-mk">
-      <h2 id="h-mk"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="8" width="3" height="6"/><rect x="6.5" y="4" width="3" height="10"/><rect x="11" y="6" width="3" height="8"/></svg>시장 상황</h2>
+    <section class="tile" data-go="note3/#market" aria-labelledby="h-mk">
+      <h2 id="h-mk"><a href="note3/#market"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="8" width="3" height="6"/><rect x="6.5" y="4" width="3" height="10"/><rect x="11" y="6" width="3" height="8"/></svg>시장 상황</a></h2>
       <dl class="mk" id="mk"></dl>
     </section>
-    <section class="tile" aria-labelledby="h-cal">
-      <h2 id="h-cal"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M2 7 H14 M5 1.5 V4 M11 1.5 V4"/></svg>일정</h2>
+    <section class="tile" data-go="note3/#cal" aria-labelledby="h-cal">
+      <h2 id="h-cal"><a href="note3/#cal"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M2 7 H14 M5 1.5 V4 M11 1.5 V4"/></svg>일정</a></h2>
       <div class="cal" id="cal"><span class="flat">―</span></div>
       <div class="next" id="next"></div>
     </section>
   </div>
 
   <!-- 3) 뉴스 요약 -->
-  <section class="tile news" aria-labelledby="h-nw">
-    <h2 id="h-nw"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2.5" width="12" height="11" rx="2"/><path d="M5 6 H11 M5 9 H11 M5 12 H8.5"/></svg>뉴스 요약<small id="nwWhen"></small></h2>
+  <section class="tile news" data-go="note3/#news" aria-labelledby="h-nw">
+    <h2 id="h-nw"><a href="note3/#news"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2.5" width="12" height="11" rx="2"/><path d="M5 6 H11 M5 9 H11 M5 12 H8.5"/></svg>뉴스 요약</a><small id="nwWhen"></small></h2>
     <p class="brief" id="brief"></p>
     <ul class="nl" id="nl"></ul>
   </section>
@@ -213,7 +221,7 @@ Promise.all([load('market__latest'), load('news__latest'), load('market__earning
     return '<li><div class="l"><span>' + esc(NAMES[t][0]) + '</span>' + pct(v) + '</div><div class="bar"><i style="width:' + w + '%;background:var(' + (v > 0 ? '--up' : '--down') + ')"></i></div></li>';
   }
   $('mv').innerHTML = (up.map(mvLi).join('') || '<li class="flat">오른 종목 없음</li>') + '<li class="gap"></li>' + (dn.map(mvLi).join('') || '<li class="flat">내린 종목 없음</li>');
-  $('h-mv').innerHTML = $('h-mv').innerHTML.replace(/<small>.*<\/small>/, '') + '<small>' + st.length + '/48</small>';
+  var sm = $('h-mv').querySelector('small') || $('h-mv').appendChild(document.createElement('small')); sm.textContent = st.length + '/48';
 
   /* 시장 상황: 지수 3개 + 비트코인 + 환율. 눈금 막대는 가운데가 0%, 양끝이 ±1.5%. */
   function meter(v) {
@@ -281,10 +289,17 @@ Promise.all([load('market__latest'), load('news__latest'), load('market__earning
 function fitNews() {
   var nl = $('nl'); if (!nl) return;
   var li = nl.children, i;
+  nl.style.justifyContent = 'flex-start';   // 재는 동안은 위로 붙여서
   for (i = 0; i < li.length; i++) li[i].style.display = '';
   var bottom = nl.getBoundingClientRect().bottom;
   for (i = 0; i < li.length; i++) if (li[i].getBoundingClientRect().bottom > bottom + 1) li[i].style.display = 'none';
+  nl.style.justifyContent = 'space-evenly';  // 남은 줄을 칸 높이에 고르게
 }
+// 칸 아무 곳이나 누르면 노트의 해당 탭으로 가요. 단, 뉴스 제목 같은 안쪽 링크를 누르면 그 링크로 가요.
+document.addEventListener('click', function (e) {
+  if (e.target.closest('a')) return;
+  var t = e.target.closest('[data-go]'); if (t) location.href = t.getAttribute('data-go');
+});
 window.addEventListener('resize', fitNews);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitNews);   // 글꼴이 늦게 와서 줄 높이가 바뀌면 다시 계산
 </script>
