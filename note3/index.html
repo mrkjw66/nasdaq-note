@@ -83,6 +83,88 @@ nav.tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: v
 button:focus-visible, summary:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 section.panel { padding-top: 24px; }
+/* ---------- 홈(첫 화면): 내 계좌 · 시장 상황 · 일정 · 뉴스 요약 네 칸 ---------- */
+.hm { display: flex; flex-direction: column; gap: 14px; }
+.hm-mid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 14px; }
+.hm-big { grid-row: 1 / 3; }
+.hm-t { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 15px; min-width: 0; overflow: hidden;
+  display: flex; flex-direction: column; cursor: pointer; transition: border-color .15s, transform .15s; }
+.hm-t:hover { border-color: var(--accent); }
+.hm-t:active { transform: scale(.99); }
+.hm-t h3 { font-size: 13.5px; font-weight: 700; margin: 0 0 8px; display: flex; align-items: center; gap: 6px; }
+.hm-t h3 a { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.hm-t h3 a::after { content: '›'; color: var(--muted); font-size: 16px; line-height: 1; }
+.hm-t h3 svg { width: 15px; height: 15px; color: var(--accent); flex: none; }
+.hm-t h3 small { margin-left: auto; font-weight: 400; color: var(--muted); font-size: 11px; }
+.hm-up { color: var(--up); } .hm-down { color: var(--down); } .hm-flat { color: var(--muted); }
+.hm-stale { opacity: .5; }
+/* 내 계좌 */
+.hm-acc { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; gap: 8px; }
+.hm-tot dt { font-size: 12px; color: var(--muted); }
+.hm-tot dd { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.hm-tot dd small { font-size: 13px; font-weight: 600; margin-left: 6px; }
+.hm-two { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px; }
+.hm-two div { background: var(--bg); border-radius: 8px; padding: 6px 8px; min-width: 0; }
+.hm-two span { display: block; color: var(--muted); font-size: 11px; }
+.hm-two b { font-size: 13px; white-space: nowrap; }
+.hm-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+@media (max-width: 430px) { .hm-two { grid-template-columns: 1fr; gap: 4px; } .hm-two div { display: flex; justify-content: space-between; align-items: baseline; } .hm-two span { display: inline; } }
+.hm-hold { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.hm-hold .l { display: flex; justify-content: space-between; gap: 6px; font-size: 13px; }
+.hm-hold .l span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hm-bar { height: 5px; border-radius: 3px; background: var(--line); margin-top: 3px; overflow: hidden; }
+.hm-bar i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+/* 종목 등락(공개판 왼쪽 큰 칸): 많이 오른 3 · 많이 내린 3, 막대 길이 = 등락 크기 */
+.hm-mv { list-style: none; margin: 0; padding: 0; flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: space-evenly; }
+.hm-mv li { min-width: 0; }
+.hm-mv .l { display: flex; justify-content: space-between; gap: 6px; font-size: 13px; }
+.hm-mv .l span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hm-mv .gap { height: 4px; }
+/* 시장 상황 */
+.hm-mk { margin: 0; flex: 1; display: grid; grid-template-columns: auto 1fr auto; gap: 4px 8px; align-items: center; align-content: space-evenly; font-size: 13px; }
+.hm-mk dt { color: var(--muted); white-space: nowrap; }
+.hm-mk dd { margin: 0; }
+.hm-meter { position: relative; height: 6px; border-radius: 3px; background: var(--line); }
+.hm-meter::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--muted); opacity: .5; }
+.hm-meter i { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
+/* 일정 */
+.hm-cal { flex: 1; display: flex; gap: 10px; align-items: center; }
+.hm-pg { flex: none; width: 40px; border-radius: 8px; overflow: hidden; text-align: center; border: 1px solid var(--line); background: var(--bg); }
+.hm-pg b { display: block; background: var(--accent); color: var(--btn-fg); font-size: 10.5px; padding: 1px 0; }
+.hm-pg span { display: block; font-size: 17px; font-weight: 500; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.hm-cal ul { list-style: none; margin: 0; padding: 0; min-width: 0; font-size: 12.5px; }
+.hm-cal li { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.35; margin-bottom: 2px; }
+.hm-cal li .tm { color: var(--muted); margin-right: 4px; font-variant-numeric: tabular-nums; }
+.hm-mine { color: var(--accent); font-weight: 700; }
+.hm-next { margin-top: 6px; font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 뉴스 요약 */
+.hm-brief { font-size: 13px; margin: 0 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.hm-nl { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.hm-nl li { display: grid; grid-template-columns: 4px auto 1fr auto; gap: 8px; align-items: center; font-size: 13px; min-width: 0; }
+.hm-nl .k { align-self: stretch; border-radius: 2px; background: var(--line); }
+.hm-nl .k.up { background: var(--up); } .hm-nl .k.down { background: var(--down); }
+.hm-chip { font-size: 11px; padding: 1px 6px; border-radius: 6px; background: var(--accent-bg); color: var(--accent); font-variant-numeric: tabular-nums; }
+.hm-chip.mine { background: var(--accent); color: var(--btn-fg); }
+.hm-nl .tt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none; color: inherit; }
+.hm-nl .d { font-size: 11px; color: var(--muted); }
+@media (max-width: 400px) { .hm, .hm-mid { gap: 11px; } .hm-t { padding: 11px 12px; } .hm-tot dd { font-size: 19px; } }
+@media (min-width: 700px) { .hm, .hm-mid { gap: 18px; } .hm-t { padding: 18px 20px; } .hm-t h3 { font-size: 14.5px; } }
+/* 홈일 때(body.is-home): 로고·제목·메뉴 버튼만 남기고 숨겨서, 네 칸이 스크롤 없이 한 화면에 들어가게 해요 */
+body.is-home header.top { padding: 14px 0 12px; }
+body.is-home .lede, body.is-home header.top .note, body.is-home .mast-r, body.is-home .menu-bar,
+body.is-home .tape, body.is-home #stale, body.is-home #brief, body.is-home .wrap > footer { display: none !important; }
+body.is-home section.panel { padding-top: 0; }
+body.is-home { padding-bottom: 10px; }
+#p-home .hm { overflow: hidden; }
+#p-home .hm > .hm-t { flex: 1; min-height: 0; }          /* 뉴스 칸이 남은 높이를 모두 써요 */
+#p-home .hm-nl { flex: 1; min-height: 0; overflow: hidden; }
+/* 가운데 세 칸 : 뉴스 칸 = 1.8 : 1 로 높이를 나눠요. 칸 안에 다 안 들어가는 보유 종목·뉴스 줄은 fitHome이 숨겨요. */
+#p-home .hm-mid { flex: 1.8; min-height: 0; grid-template-rows: 1fr 1fr; }
+#p-home .hm-hold { flex: 1; min-height: 0; overflow: hidden; }
+#p-home .hm-acc { justify-content: flex-start; gap: 8px; min-height: 0; overflow: hidden; }
+#p-home .hm-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 430px) { #p-home .hm-t { padding: 12px 13px; } #p-home .hm-t h3 { margin-bottom: 6px; } #p-home .hm-tot dd { font-size: 19px; }
+  #p-home .hm-two div { padding: 4px 8px; } #p-home .hm-mk { gap: 2px 8px; } }
 /* ---------- 화면 전환: 새 탭이 살짝 아래에서 올라오며 나타나요 ---------- */
 @keyframes panelIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 /* 화면 전환 기능(View Transitions)이 있는 브라우저: 바뀌기 전 화면은 서서히 사라지고, 새 화면은 아래에서 올라오며 나타나요.
@@ -1039,7 +1121,32 @@ details.stock summary .tick { display: none; }
 
   
 
-  <!-- 내 계좌 -->
+  <!-- 홈(첫 화면): 종목 등락 · 시장 상황 · 일정 · 뉴스 요약 -->
+  <section class="panel" id="p-home" role="tabpanel" hidden>
+    <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">홈</h2>
+    <div class="hm">
+      <div class="hm-mid">
+        <section class="hm-t hm-big" data-go="stocks">
+          <h3><a href="#stocks"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12 L6 7 L9 10 L14 4"/><path d="M10 4 H14 V8"/></svg>종목 등락</a><small id="hmMvN"></small></h3>
+          <ul class="hm-mv" id="hmMv"><li class="hm-flat">시세를 불러오는 중이에요.</li></ul>
+        </section>
+        <section class="hm-t" data-go="market">
+          <h3><a href="#market"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="8" width="3" height="6"/><rect x="6.5" y="4" width="3" height="10"/><rect x="11" y="6" width="3" height="8"/></svg>시장 상황</a><small id="hmMkAt"></small></h3>
+          <dl class="hm-mk" id="hmMk"></dl>
+        </section>
+        <section class="hm-t" data-go="cal">
+          <h3><a href="#cal"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M2 7 H14 M5 1.5 V4 M11 1.5 V4"/></svg>일정</a></h3>
+          <div class="hm-cal" id="hmCal"><span class="hm-flat">―</span></div>
+          <div class="hm-next" id="hmNext"></div>
+        </section>
+      </div>
+      <section class="hm-t" data-go="news">
+        <h3><a href="#news"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2.5" width="12" height="11" rx="2"/><path d="M5 6 H11 M5 9 H11 M5 12 H8.5"/></svg>뉴스 요약</a><small id="hmNwAt"></small></h3>
+        <p class="hm-brief" id="hmBrief"></p>
+        <ul class="hm-nl" id="hmNews"></ul>
+      </section>
+    </div>
+  </section>
   <section class="panel" id="p-mine" role="tabpanel" aria-labelledby="t-mine">
     <h2>내 계좌</h2>
     <p class="sub" id="pfStatus">보유 종목을 불러오는 중이에요.</p>
@@ -2560,6 +2667,7 @@ details.stock summary .tick { display: none; }
 
   /* 메뉴: 햄버거 버튼 하나로 전체 목록을 열어요 (주소의 #market 같은 해시로도 열려요) */
   var GROUPS = [
+    { id: 'home', label: '홈', subs: [['home', '홈']] },   // 앱을 열면 처음 보이는 네 칸 요약
     { id: 'today', label: '오늘', subs: [['market', '시장'], ['news', '뉴스'], ['cal', '일정']] },
     { id: 'mine', label: '내 계좌', pv: true, subs: [['mine', '보유 종목'], ['growth', '자산 추이'], ['div', '배당 달력'], ['journal', '매매 일지'], ['plan', '투자 계획'], ['help', '투자 보조']] },
     { id: 'stocks', label: '종목', subs: [['stocks', '종목 카드'], ['compare', '비교'], ['lines', '알림선', 1], ['memos', '내 메모', 1]] },
@@ -2605,6 +2713,8 @@ details.stock summary .tick { display: none; }
     if (tabs.indexOf(name) < 0) name = GUEST ? 'market' : 'mine';
     if (GUEST && PRIVATE_TABS.indexOf(name) >= 0) name = 'market';
     CUR = name;
+    document.body.classList.toggle('is-home', name === 'home');   // 홈이면 머리 부분을 줄여요
+    if (name === 'home' && typeof fitHome === 'function') { setTimeout(fitHome, 0); setTimeout(fitHome, 380); }
     var grp = groupOf(name);
     $('menuWhere').innerHTML = '<span>' + grp.label + '</span><b>' + subLabel(name) + '</b>';
     tabs.forEach(function (t) { var p = $('p-' + t); if (p) p.hidden = t !== name; });
@@ -2621,7 +2731,7 @@ details.stock summary .tick { display: none; }
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('menu').hidden) { openMenu(false); $('menuBtn').focus(); } });
   window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
-  show((location.hash || '#mine').slice(1), true);
+  show((location.hash || '#home').slice(1), true);   // 처음 열면 홈
 
   /* 표·계산기 고르기 */
   document.querySelectorAll('.seg').forEach(function (g) {
@@ -3174,6 +3284,7 @@ details.stock summary .tick { display: none; }
     var focusIn = document.activeElement && $('pfList').contains(document.activeElement);
     if (!focusIn && ($('pfList').querySelectorAll('.pf-row').length !== PF.length || PFSORT !== 'in')) renderEditor(); else renderResults();
     renderSummary();
+    renderHome();
   }
   function saveState(t) { $('pfSave').textContent = t; }
   function flush() {
@@ -3571,6 +3682,7 @@ details.stock summary .tick { display: none; }
   var MACRO = null;
   var MK = { fed: '금리', cpi: '물가', jobs: '고용', consumer: '소비', gdp: '성장', election: '선거', other: '기타' };
   function renderMacro() {
+    renderHome();
     var el = $('macroList'); if (!el) return;
     var L = MACRO && Array.isArray(MACRO.items) ? MACRO.items : [];
     var now = Date.now(), mine = {}; PF.forEach(function (l) { mine[l.t] = true; });
@@ -4108,6 +4220,7 @@ details.stock summary .tick { display: none; }
   /* ---------- 뉴스 (db: news/latest, 매일 예약 작업이 더함) ---------- */
   var NEWS = [], newsKey = 'mine', DROPR = {};
   function renderNews() {
+    renderHome();
     var mine = {}; PF.forEach(function (l) { mine[l.t] = true; });
     var hasMine = Object.keys(mine).length > 0;
     var list = NEWS.filter(function (n) {
@@ -4163,7 +4276,140 @@ details.stock summary .tick { display: none; }
 
   /* ---------- 실적 발표 일정 (market/latest 의 items[t].nextEarnings) ---------- */
   var EST = null;
+  /* ---------- 홈(첫 화면) 그리기 ----------
+     계좌(PF)·시세(LIVE, MKT)·실적(EST)·경제 일정(MACRO)·뉴스(NEWS, BRIEF) 중 하나라도 바뀌면 renderHome()이 불려요.
+     여러 번 연달아 불려도 한 번만 그리도록 잠깐(30ms) 모았다가 그려요. */
+  var HMT = null;
+  function renderHome() { clearTimeout(HMT); HMT = setTimeout(drawHome, 30); }
+  function drawHome() {
+    if (!$('p-home')) return;
+    var WDK = ['일', '월', '화', '수', '목', '금', '토'];
+    var esc = function (x) { return String(x == null ? '' : x).replace(/[<>&"]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]; }); };
+    var pc = function (v, d) {   // 등락률: 오르면 빨강 ▲, 내리면 파랑 ▼
+      if (typeof v !== 'number' || !isFinite(v)) return '<span class="hm-flat">―</span>';
+      return '<span class="' + (v > 0 ? 'hm-up' : v < 0 ? 'hm-down' : 'hm-flat') + '">' + (v > 0 ? '▲' : v < 0 ? '▼' : '') + Math.abs(v).toFixed(d == null ? 1 : d) + '%</span>';
+    };
+    var shortN = function (t) { var d = by(t); return d ? d.n.replace(/\s*\(.*\)$/, '').replace(/ A$/, '') : t; };
+    var mine = {}; PF.forEach(function (l) { if (valid(l)) mine[l.t] = true; });
+
+    /* 1) 종목 등락: 그날(MKT.asOf) 종가를 받은 '주식' 중 많이 오른 3개, 많이 내린 3개.
+       막대 길이 = 등락률 크기(이 6개 중 가장 큰 값을 꽉 찬 막대로). ETF·코인은 빼요. */
+    var fx = fxNow(), day0 = MKT && MKT.asOf;
+    var st = ALL.filter(function (d) { var q = LIVE && LIVE[d.t]; return !d.etf && !d.coin && q && q.date === day0 && typeof q.chg1d === 'number'; })
+      .map(function (d) { return d.t; }).sort(function (x, y) { return LIVE[y].chg1d - LIVE[x].chg1d; });
+    if (!st.length) $('hmMv').innerHTML = '<li class="hm-flat">' + (LIVE ? '오늘 종가를 받은 종목이 아직 없어요.' : '시세를 불러오는 중이에요.') + '</li>';
+    else {
+      var ups = st.filter(function (t) { return LIVE[t].chg1d > 0; }).slice(0, 3);
+      var dns = st.filter(function (t) { return LIVE[t].chg1d < 0; }).slice(-3).reverse();
+      var mx = Math.max.apply(null, ups.concat(dns).map(function (t) { return Math.abs(LIVE[t].chg1d); }).concat([1]));
+      var mvLi = function (t) {
+        var v = LIVE[t].chg1d, w = Math.max(6, Math.round(Math.abs(v) / mx * 100));
+        return '<li><div class="l"><span>' + esc(shortN(t)) + '</span>' + pc(v, 2) + '</div><div class="hm-bar"><i style="width:' + w + '%;background:var(' + (v > 0 ? '--up' : '--down') + ')"></i></div></li>';
+      };
+      $('hmMv').innerHTML = (ups.map(mvLi).join('') || '<li class="hm-flat">오른 종목 없음</li>') + '<li class="gap"></li>' + (dns.map(mvLi).join('') || '<li class="hm-flat">내린 종목 없음</li>');
+    }
+    $('hmMvN').textContent = st.length ? st.length + '/' + ALL.filter(function (d) { return !d.etf && !d.coin; }).length : '';
+
+    /* 2) 시장 상황: 지수 3개 + 비트코인 눈금(가운데 0%, 끝 ±1.5%) + 환율 */
+    var meter = function (v) {
+      if (typeof v !== 'number') return '<div class="hm-meter"></div>';
+      var w = Math.min(50, Math.abs(v) / 1.5 * 50);
+      return '<div class="hm-meter"><i style="' + (v >= 0 ? 'left:50%' : 'right:50%') + ';width:' + w + '%;background:var(' + (v >= 0 ? '--up' : '--down') + ')"></i></div>';
+    };
+    var mk = '', idx = (MKT && MKT.idx) || [], asOf = MKT && MKT.asOf;
+    [['S&P 500', 'S&P'], ['나스닥 종합', '나스닥'], ['다우', '다우']].forEach(function (p) {
+      var x = idx.filter(function (i) { return i.n === p[0]; })[0];
+      if (x) mk += '<dt>' + p[1] + '</dt><dd>' + meter(x.chg1d) + '</dd><dd>' + pc(x.chg1d, 2) + '</dd>';
+    });
+    var b = LIVE && LIVE.BTC;
+    if (b) { var st = asOf && b.date < asOf ? ' class="hm-stale"' : ''; mk += '<dt' + st + '>비트코인</dt><dd' + st + '>' + meter(b.chg1d) + '</dd><dd' + st + '>' + pc(b.chg1d, 2) + '</dd>'; }
+    if (fx) mk += '<dt>환율</dt><dd style="grid-column:2 / 4;text-align:right">' + fx.toLocaleString('ko-KR', { maximumFractionDigits: 1 }) + '원</dd>';
+    $('hmMk').innerHTML = mk || '<dt class="hm-flat">시세를 불러오는 중이에요.</dt>';
+    if (asOf) { var a = asOf.split('-'); $('hmMkAt').textContent = Number(a[1]) + '/' + Number(a[2]); }
+
+    /* 3) 일정: 가장 가까운 하루를 달력 모양으로. 내가 가진 종목 실적은 강조. */
+    var kst = function (d) { var k = new Date(d.getTime() + 9 * 36e5); return { key: k.toISOString().slice(0, 10), m: k.getUTCMonth() + 1, d: k.getUTCDate(), w: WDK[k.getUTCDay()], time: ('0' + k.getUTCHours()).slice(-2) + ':' + ('0' + k.getUTCMinutes()).slice(-2) }; };
+    var ev = [], now = Date.now();
+    ALL.forEach(function (d) {   // 실적: 장 시작 전(BMO) = 한국 그날 22:30, 장 마감 후(AMC) = 한국 다음 날 06:00 (대략)
+      var es = EST && EST[d.t], q = LIVE && LIVE[d.t];
+      var e = es && typeof es.date === 'string' ? es.date : (q && typeof q.nextEarnings === 'string' ? q.nextEarnings : null);
+      if (!e || !/^\d{4}-\d{2}-\d{2}$/.test(e)) return;
+      var tm = (es && es.time) || (q && q.earningsTime) || '';
+      var k = tm === 'AMC' ? new Date(new Date(e + 'T06:00:00+09:00').getTime() + 864e5) : new Date(e + 'T22:30:00+09:00');
+      ev.push({ k: k, kind: 'e', t: d.t, name: shortN(d.t), mine: !!mine[d.t] });
+    });
+    ((MACRO && MACRO.items) || []).forEach(function (m) {
+      if (m && m.kstISO && (m.importance || 0) >= 2) ev.push({ k: new Date(m.kstISO), kind: 'm', name: String(m.name || '').replace(/\s*\(.*\)$/, '') });
+    });
+    ev = ev.filter(function (x) { return x.k.getTime() > now - 2 * 36e5 && x.k.getTime() < now + 40 * 864e5; }).sort(function (a, b) { return a.k - b.k; });
+    var lines = function (list) {   // 같은 시각의 실적은 이름을 묶어요
+      var g = {};
+      list.forEach(function (x) { var key = kst(x.k).time + '|' + x.kind; (g[key] = g[key] || []).push(x); });
+      return Object.keys(g).sort().map(function (key) {
+        var arr = g[key];
+        return { time: key.split('|')[0], html: arr.map(function (x) { return x.mine ? '<span class="hm-mine">★' + esc(x.name) + '</span>' : esc(x.name); }).join('·') + (arr[0].kind === 'e' ? ' 실적' : '') };
+      });
+    };
+    if (ev.length) {
+      var k0 = kst(ev[0].k), d0 = ev.filter(function (x) { return kst(x.k).key === k0.key; });
+      $('hmCal').innerHTML = '<div class="hm-pg"><b>' + k0.m + '월</b><span>' + k0.d + '</span></div><ul>' +
+        lines(d0).map(function (l) { return '<li><span class="tm">' + l.time + '</span>' + l.html + '</li>'; }).join('') +
+        '<li class="hm-flat" style="font-size:11.5px">' + k0.w + '요일 · 한국 시간</li></ul>';
+      var rest = ev.filter(function (x) { return kst(x.k).key !== k0.key; });
+      // 다음 일정: 내 종목 실적이 있으면 그걸 먼저 알려 줘요
+      var myNext = rest.filter(function (x) { return x.mine; })[0];
+      if (rest.length) {
+        var k1 = kst(rest[0].k), d1 = rest.filter(function (x) { return kst(x.k).key === k1.key; });
+        $('hmNext').innerHTML = '다음 ' + k1.m + '/' + k1.d + '(' + k1.w + ') ' + lines(d1).map(function (l) { return l.html; }).join(', ') +
+          (myNext && kst(myNext.k).key !== k1.key ? ' · ★' + esc(myNext.name) + ' ' + kst(myNext.k).m + '/' + kst(myNext.k).d : '');
+      } else $('hmNext').textContent = '';
+    } else { $('hmCal').innerHTML = '<span class="hm-flat">앞으로 잡힌 큰 일정이 없어요.</span>'; $('hmNext').textContent = ''; }
+
+    /* 4) 뉴스 요약: 아침 브리핑 + 내 종목 뉴스 먼저, 그다음 최신·중요 순 */
+    $('hmBrief').textContent = BRIEF || '';
+    $('hmNwAt').textContent = NEWS_AT ? String(NEWS_AT).replace(' 기준', '') : '';   // 예: '11. 11. 오전 07:45'
+    var isMine = function (n) { return (n.tickers || [n.t]).some(function (t) { return mine[t]; }); };
+    var list = (NEWS || []).slice().sort(function (a, b) {
+      var ma = isMine(a) ? 1 : 0, mb = isMine(b) ? 1 : 0;
+      if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+      if (ma !== mb) return mb - ma;
+      return (b.importance || 0) - (a.importance || 0);
+    }).slice(0, 10);
+    $('hmNews').innerHTML = list.length ? list.map(function (n) {
+      var imp = n.impact === 'up' || n.impact === 'down' ? n.impact : '';
+      var dd = String(n.date || '').split('-');
+      return '<li><span class="k ' + imp + '"></span><span class="hm-chip' + (isMine(n) ? ' mine' : '') + '">' + esc(n.t) + '</span>' +
+        (n.url ? '<a class="tt" href="' + esc(n.url) + '" target="_blank" rel="noopener">' + esc(n.title) + '</a>' : '<span class="tt">' + esc(n.title) + '</span>') +
+        '<span class="d">' + (dd.length === 3 ? Number(dd[1]) + '/' + Number(dd[2]) : '') + '</span></li>';
+    }).join('') : '<li class="hm-flat" style="display:block">뉴스를 불러오는 중이에요.</li>';
+    fitHome();
+  }
+  /* 네 칸 높이를 화면에 남은 높이에 맞추고, 뉴스 칸에 다 안 들어가는 줄은 숨겨요(반쯤 잘린 줄이 안 보이게). */
+  function fitHome() {
+    var p = $('p-home'), hm = p && p.querySelector('.hm');
+    if (!hm || p.hidden) return;
+    var top = hm.getBoundingClientRect().top + (window.scrollY || 0);
+    hm.style.height = Math.max(420, Math.floor(window.innerHeight - top - 12)) + 'px';
+    [$('hmNews'), p.querySelector('.hm-hold')].forEach(function (box) {   // 뉴스 줄, 보유 종목 줄
+      if (!box) return;
+      var li = box.children, i;
+      for (i = 0; i < li.length; i++) li[i].style.display = '';
+      var bottom = box.getBoundingClientRect().bottom;
+      for (i = 0; i < li.length; i++) if (li[i].getBoundingClientRect().bottom > bottom + 1) li[i].style.display = 'none';
+    });
+  }
+  window.addEventListener('resize', function () { if (document.body.classList.contains('is-home')) fitHome(); });
+  // 홈 칸을 누르면 그 탭으로 가요(뉴스 제목 같은 안쪽 링크는 그 링크로).
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    var t = e.target.closest('#p-home [data-go]');
+    if (!t || e.target.closest('a[target]')) return;
+    if (e.target.closest('h3 a')) e.preventDefault();   // 제목 링크를 눌러도 칸 전체를 누른 것처럼
+    HM_OPEN = t;                                        // 이 칸이 커지며 탭으로 열려요
+    location.hash = '#' + t.getAttribute('data-go');
+  });
   function renderEarn() {
+    renderHome();
     var today = new Date(); today.setHours(0, 0, 0, 0);
     var mine = {}; PF.forEach(function (l) { mine[l.t] = true; });
     var safe = function (x) { return String(x == null ? '' : x).replace(/[<>&"]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]; }); };
