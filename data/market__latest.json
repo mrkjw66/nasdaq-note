@@ -1,1 +1,669 @@
-{"asOf": "2026-11-17", "fx": {"date": "2026-11-18", "src": "tokenpost.kr (11/18 서울외환시장 개장 1,335.8원)", "usdkrw": 1335.8}, "idx": [{"chg1d": -1.03, "chg5d": -2.4, "close": 7340.53, "n": "S&P 500", "ytd": 7.23}, {"chg1d": -0.74, "chg5d": -2.94, "close": 24328.38, "n": "나스닥 종합", "ytd": 4.67}, {"chg1d": -0.72, "chg5d": -2.66, "close": 27001.78, "n": "나스닥 100", "ytd": 6.92}, {"chg1d": -1.64, "chg5d": -2.82, "close": 50759.42, "n": "다우", "ytd": 5.61}], "items": {"AAPL": {"chg1d": -0.25, "chg5d": 0.98, "close": 351.91, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 4904.2, "nextEarnings": "2027-01-28", "src": "fnnews.com (11/17 종가)"}, "ABNB": {"chg1d": -2.87, "chg5d": -3.24, "close": 180.85, "date": "2026-11-17", "earningsTime": null, "marketCap": 105.4, "nextEarnings": "2027-02-11", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "ADBE": {"chg1d": -4.33, "chg5d": -0.54, "close": 235.41, "date": "2026-11-17", "earningsTime": null, "marketCap": 91.7, "nextEarnings": "2026-12-09", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "ADI": {"chg1d": 0.19, "chg5d": -2.46, "close": 383.64, "date": "2026-11-17", "earningsTime": "BMO", "marketCap": 191.2, "nextEarnings": "2026-11-24", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "AMAT": {"chg1d": -0.29, "chg5d": -6.26, "close": 349.23, "date": "2026-11-17", "earningsTime": null, "marketCap": 271, "nextEarnings": null, "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}, "AMD": {"chg1d": -0.17, "chg5d": -2.29, "close": 503.41, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 641.7, "nextEarnings": "2027-02-02", "src": "fnnews.com (11/17 종가)"}, "AMGN": {"chg1d": -0.98, "chg5d": -1.57, "close": 457.91, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 248.4, "nextEarnings": "2027-02-02", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "AMZN": {"chg1d": 0.05, "chg5d": -4.8, "close": 257.88, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 2739.6, "nextEarnings": "2027-02-04", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "ASML": {"chg1d": -1.68, "chg5d": -8.14, "close": 1383.12, "date": "2026-11-17", "earningsTime": "BMO", "marketCap": 533.9, "nextEarnings": "2027-01-27", "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}, "AVGO": {"chg1d": 2.46, "chg5d": 2.9, "close": 341.6, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 1364, "nextEarnings": "2026-12-10", "src": "fnnews.com (11/17 종가)"}, "BAC": {"chg1d": -1.28, "chg5d": -2.43, "close": 49.45, "date": "2026-11-17", "earningsTime": "BMO", "marketCap": 341.2, "nextEarnings": "2027-01-15", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "BTC": {"chg1d": -0.71, "chg5d": -12.35, "close": 64841, "date": "2026-11-16", "earningsTime": null, "marketCap": 1304.2, "nextEarnings": null, "src": "coingecko.com (UTC 11/16 종가) · coincodex 64,894 교차확인"}, "COST": {"chg1d": -0.35, "chg5d": 4.16, "close": 1110.49, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 480.2, "nextEarnings": "2026-12-10", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "CRM": {"chg1d": -9.62, "chg5d": -9.03, "close": 194.2, "date": "2026-11-17", "earningsTime": null, "marketCap": 159.9, "nextEarnings": "2026-12-02", "src": "247wallst.com 11/17 마감 무버"}, "CRWD": {"chg1d": -1.64, "chg5d": -2.79, "close": 219.46, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 224.7, "nextEarnings": "2026-12-01", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "CSCO": {"chg1d": 0.62, "chg5d": -3.07, "close": 95.14, "date": "2026-11-17", "earningsTime": null, "marketCap": 360.4, "nextEarnings": null, "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}, "ETH": {"chg1d": 0.19, "chg5d": -9.64, "close": 1822.96, "date": "2026-11-17", "earningsTime": null, "marketCap": 222.8, "nextEarnings": null, "src": "coingecko.com (UTC 11/17 종가)"}, "GILD": {"chg1d": 1.58, "chg5d": -0.39, "close": 170.21, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 210.7, "nextEarnings": "2027-02-04", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "GLD": {"chg1d": -0.12, "chg5d": -4.57, "close": 352.47, "date": "2026-11-17", "earningsTime": null, "marketCap": null, "nextEarnings": null, "src": "fool.com 시세 (전일종가 352.93≈11/16 일치)"}, "GOOGL": {"chg1d": -1.24, "chg5d": -2.5, "close": 280.2, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 3274.5, "nextEarnings": "2027-02-03", "src": "fnnews.com (11/17 종가)"}, "HD": {"chg1d": -2.43, "chg5d": -3.37, "close": 339.15, "date": "2026-11-17", "earningsTime": null, "marketCap": 337.9, "nextEarnings": null, "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "INTC": {"chg1d": -0.54, "chg5d": -5.14, "close": 55.14, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 302.4, "nextEarnings": "2027-01-28", "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}, "INTU": {"chg1d": -7.06, "chg5d": -5.68, "close": 321.1, "date": "2026-11-17", "earningsTime": null, "marketCap": 85.8, "nextEarnings": "2026-11-19", "src": "247wallst.com 11/17 마감 무버"}, "ISRG": {"chg1d": -1.72, "chg5d": -4.39, "close": 430.29, "date": "2026-11-17", "earningsTime": null, "marketCap": 147.2, "nextEarnings": "2027-01-28", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "JPM": {"chg1d": -2.44, "chg5d": -3.52, "close": 330.05, "date": "2026-11-17", "earningsTime": null, "marketCap": 855.2, "nextEarnings": null, "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}, "KO": {"chg1d": -0.78, "chg5d": 2.27, "close": 98.81, "date": "2026-11-17", "earningsTime": null, "marketCap": 422.8, "nextEarnings": "2027-02-16", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "LIN": {"chg1d": -1.62, "chg5d": -1.28, "close": 515.12, "date": "2026-11-17", "earningsTime": "BMO", "marketCap": 236.7, "nextEarnings": "2027-02-11", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "LLY": {"chg1d": -1.13, "chg5d": -1.08, "close": 1416.77, "date": "2026-11-17", "earningsTime": null, "marketCap": 1340.1, "nextEarnings": "2027-02-10", "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}, "LRCX": {"chg1d": -1.05, "chg5d": -6.24, "close": 208.52, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 260.4, "nextEarnings": "2027-01-27", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "META": {"chg1d": -1.2, "chg5d": -3.51, "close": 618.89, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 1548.2, "nextEarnings": "2027-01-27", "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}, "MSFT": {"chg1d": -2.27, "chg5d": -5.05, "close": 506.24, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 3729.5, "nextEarnings": "2027-01-27", "src": "fnnews.com (11/17 종가)"}, "MU": {"chg1d": -0.92, "chg5d": -1.75, "close": 712.42, "date": "2026-11-17", "earningsTime": null, "marketCap": 684.3, "nextEarnings": "2026-12-16", "src": "fnnews.com (11/17 종가)"}, "NFLX": {"chg1d": -1.84, "chg5d": -5.67, "close": 59.67, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 247.4, "nextEarnings": "2027-01-19", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "NKE": {"chg1d": -6.3, "chg5d": -7.29, "close": 35.85, "date": "2026-11-17", "earningsTime": null, "marketCap": 53.2, "nextEarnings": "2026-12-17", "src": "fool.com Stock Market Today 11/17 (종가 35.85)"}, "NOW": {"chg1d": -6.71, "chg5d": -6.98, "close": 92.66, "date": "2026-11-17", "earningsTime": null, "marketCap": 96.1, "nextEarnings": "2027-01-27", "src": "247wallst.com 11/17 마감 무버"}, "NVDA": {"chg1d": -0.48, "chg5d": -7.99, "close": 155.39, "date": "2026-11-17", "earningsTime": null, "marketCap": 3986.1, "nextEarnings": null, "src": "fnnews.com (11/17 종가)"}, "ORCL": {"chg1d": -3.38, "chg5d": -2.5, "close": 115.03, "date": "2026-11-17", "earningsTime": null, "marketCap": 333, "nextEarnings": "2026-12-09", "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}, "PANW": {"chg1d": -2.17, "chg5d": -5.26, "close": 309.2, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 253.7, "nextEarnings": "2026-11-18", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "PEP": {"chg1d": -3.04, "chg5d": -1.09, "close": 142.05, "date": "2026-11-17", "earningsTime": "BMO", "marketCap": 190.4, "nextEarnings": "2027-02-10", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "PLTR": {"chg1d": -2.43, "chg5d": -7.26, "close": 156.56, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 351.8, "nextEarnings": "2027-02-01", "src": "fnnews.com (11/17 종가)"}, "QQQ": {"chg1d": -0.73, "chg5d": -2.64, "close": 656.95, "date": "2026-11-17", "earningsTime": null, "marketCap": null, "nextEarnings": null, "src": "theweekendspread.substack.com The Close 11/17 · fool.com 교차확인"}, "SCHD": {"chg1d": -1.53, "chg5d": -1.45, "close": 35.32, "date": "2026-11-17", "earningsTime": null, "marketCap": null, "nextEarnings": null, "src": "fool.com 시세 (전일종가 35.86≈11/16 일치)"}, "SHOP": {"chg1d": -3.99, "chg5d": -3.19, "close": 141.93, "date": "2026-11-17", "earningsTime": "BMO", "marketCap": 182.1, "nextEarnings": "2027-02-17", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "SMH": {"chg1d": -0.39, "chg5d": -4.87, "close": 460.1, "date": "2026-11-17", "earningsTime": null, "marketCap": null, "nextEarnings": null, "src": "247wallst.com · theweekendspread The Close 11/17 (11/16 461.90 heygotrade)"}, "SNPS": {"chg1d": -1.32, "chg5d": -5.3, "close": 435.57, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 83.5, "nextEarnings": "2026-12-08", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "SPCX": {"chg1d": 3.16, "chg5d": -0.97, "close": 141.7, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 1856.2, "nextEarnings": "2027-02-09", "src": "fnnews.com (11/17 종가)"}, "TLT": {"chg1d": -0.3, "chg5d": -2.98, "close": 79.48, "date": "2026-11-13", "earningsTime": null, "marketCap": null, "nextEarnings": null, "src": "fool.com 시세바 (11/13 종가, 전일비 검증)"}, "TMUS": {"chg1d": -1.25, "chg5d": -0.66, "close": 167.97, "date": "2026-11-17", "earningsTime": "BMO", "marketCap": 177.9, "nextEarnings": "2027-02-10", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "TSLA": {"chg1d": 0.1, "chg5d": 0.09, "close": 380.11, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 1364.3, "nextEarnings": "2027-01-27", "src": "fnnews.com (11/17 종가)"}, "TXN": {"chg1d": 0.7, "chg5d": -1.49, "close": 296.04, "date": "2026-11-17", "earningsTime": "AMC", "marketCap": 270.5, "nextEarnings": "2027-01-26", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "UBER": {"chg1d": -1.63, "chg5d": -1.73, "close": 68.84, "date": "2026-11-17", "earningsTime": null, "marketCap": 139.4, "nextEarnings": "2027-02-03", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "UNH": {"chg1d": -5.42, "chg5d": -3.82, "close": 389.66, "date": "2026-11-17", "earningsTime": null, "marketCap": 349.1, "nextEarnings": "2027-01-20", "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}, "V": {"chg1d": -2.27, "chg5d": -1.45, "close": 416.85, "date": "2026-11-17", "earningsTime": null, "marketCap": 777.6, "nextEarnings": null, "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}, "VOO": {"chg1d": -1.07, "chg5d": -2.37, "close": 673.17, "date": "2026-11-17", "earningsTime": null, "marketCap": null, "nextEarnings": null, "src": "fool.com 시세 (전일종가 680.26≈11/16 일치)"}, "WMT": {"chg1d": -0.74, "chg5d": 1.53, "close": 127.46, "date": "2026-11-17", "earningsTime": "BMO", "marketCap": 1006.1, "nextEarnings": "2026-11-19", "src": "fool.com 시세 (11/16 종가 대비 등락 확인)"}, "XOM": {"chg1d": 0.21, "chg5d": 1.68, "close": 167.24, "date": "2026-11-17", "earningsTime": null, "marketCap": 660.7, "nextEarnings": null, "src": "seoul.co.kr 11/17 등락률 × 11/16 종가"}}, "sectors": {"경기소비재": {"chg1d": -0.89, "chg5d": -2.66, "etf": "XLY", "ytd": -1.33}, "금융": {"chg1d": -1.89, "chg5d": 0.56, "etf": "XLF", "ytd": 5.47}, "기술": {"chg1d": -0.89, "chg5d": -3.01, "etf": "XLK", "ytd": 13.82}, "부동산": {"chg1d": -1.49, "chg5d": 1.56, "etf": "XLRE", "ytd": 10.63}, "산업재": {"chg1d": -0.54, "chg5d": -1.57, "etf": "XLI", "ytd": 7.09}, "소재": {"chg1d": -1.22, "chg5d": -0.69, "etf": "XLB", "ytd": 13.57}, "에너지": {"chg1d": -0.52, "chg5d": 4.43, "etf": "XLE", "ytd": 44.58}, "유틸리티": {"chg1d": -1.56, "chg5d": 2.95, "etf": "XLU", "ytd": 3.87}, "커뮤니케이션": {"chg1d": -1.43, "chg5d": 1.04, "etf": "XLC", "ytd": -9.74}, "필수소비재": {"chg1d": -1.22, "chg5d": 3.37, "etf": "XLP", "ytd": 20.06}, "헬스케어": {"chg1d": -1.38, "chg5d": 1.2, "etf": "XLV", "ytd": 21.18}}, "updatedAt": "2026-11-18T15:20:00+09:00"}
+{
+  "asOf": "2026-11-19",
+  "fx": {
+    "date": "2026-11-20",
+    "src": "tokenpost.kr (11/20 서울외환시장 개장 1,335.0원)",
+    "usdkrw": 1335
+  },
+  "idx": [
+    {
+      "chg1d": -2.02,
+      "chg5d": -5.49,
+      "close": 7175.83,
+      "n": "S&P 500",
+      "ytd": 4.82
+    },
+    {
+      "chg1d": -2.25,
+      "chg5d": -5.86,
+      "close": 23879.2,
+      "n": "나스닥 종합",
+      "ytd": 2.74
+    },
+    {
+      "chg1d": -2.21,
+      "chg5d": -6.26,
+      "close": 26517.05,
+      "n": "나스닥 100",
+      "ytd": 5
+    },
+    {
+      "chg1d": -2.19,
+      "chg5d": -6.12,
+      "close": 49097.06,
+      "n": "다우",
+      "ytd": 2.15
+    }
+  ],
+  "items": {
+    "AAPL": {
+      "chg1d": -0.92,
+      "chg5d": -1.67,
+      "close": 349.21,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 4904.2,
+      "nextEarnings": "2027-01-28",
+      "src": "seoul.co.kr 11/20 (11/19 종가)"
+    },
+    "ABNB": {
+      "chg1d": -4.1,
+      "chg5d": -4.61,
+      "close": 172.79,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 105,
+      "nextEarnings": "2027-02-11",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "ADBE": {
+      "chg1d": -1.99,
+      "chg5d": -7.06,
+      "close": 221.69,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 88,
+      "nextEarnings": "2026-12-09",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "ADI": {
+      "chg1d": -1.19,
+      "chg5d": -7.78,
+      "close": 377.44,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 185.1,
+      "nextEarnings": "2026-11-24",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "AMAT": {
+      "chg1d": -3.6,
+      "chg5d": -10.98,
+      "close": 339.11,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 271,
+      "nextEarnings": "2027-02-11",
+      "src": "news.jkn.co.kr 11/20 (11/19 종가)"
+    },
+    "AMD": {
+      "chg1d": -7.72,
+      "chg5d": -16.42,
+      "close": 489.19,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 641.7,
+      "nextEarnings": "2027-02-02",
+      "src": "seoul.co.kr 11/20·substack 11/19"
+    },
+    "AMGN": {
+      "chg1d": -1.14,
+      "chg5d": -6.05,
+      "close": 438.82,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 240.1,
+      "nextEarnings": "2027-02-02",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "AMZN": {
+      "chg1d": -3.87,
+      "chg5d": -3.77,
+      "close": 257.37,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 2739.6,
+      "nextEarnings": "2027-02-04",
+      "src": "seoul.co.kr 11/20·stocktitan 11/19"
+    },
+    "ASML": {
+      "chg1d": -2.8,
+      "chg5d": -9.41,
+      "close": 1356.2,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 533.9,
+      "nextEarnings": "2027-01-27",
+      "src": "seoul.co.kr 11/20 (11/19 종가)"
+    },
+    "AVGO": {
+      "chg1d": -2.09,
+      "chg5d": -4.86,
+      "close": 346.65,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 1364,
+      "nextEarnings": "2026-12-10",
+      "src": "fool.com 11/19·seoul.co.kr"
+    },
+    "BAC": {
+      "chg1d": -0.7,
+      "chg5d": -3.84,
+      "close": 48.57,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 341.2,
+      "nextEarnings": "2027-01-15",
+      "src": "financialcontent.com 공식종가 11/19"
+    },
+    "BTC": {
+      "chg1d": -1.72,
+      "chg5d": -3.47,
+      "close": 61901.8,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 1245.1,
+      "nextEarnings": null,
+      "src": "coinglass.com (UTC 11/19 종가)"
+    },
+    "COST": {
+      "chg1d": -0.25,
+      "chg5d": 0.15,
+      "close": 1093.83,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 480.2,
+      "nextEarnings": "2026-12-10",
+      "src": "financialcontent.com 히스토리 11/19"
+    },
+    "CRM": {
+      "chg1d": -3.72,
+      "chg5d": -15.75,
+      "close": 183.31,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 156.7,
+      "nextEarnings": "2026-12-02",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "CRWD": {
+      "chg1d": 2.71,
+      "chg5d": 5.91,
+      "close": 243.46,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 242.7,
+      "nextEarnings": "2026-12-01",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "CSCO": {
+      "chg1d": -2.55,
+      "chg5d": -7.17,
+      "close": 94.7,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 382.6,
+      "nextEarnings": "2027-02-10",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "ETH": {
+      "chg1d": -1.1,
+      "chg5d": -0.79,
+      "close": 1755.2,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 214.5,
+      "nextEarnings": null,
+      "src": "coinglass.com (UTC 11/19 종가)"
+    },
+    "GILD": {
+      "chg1d": -1.45,
+      "chg5d": -0.85,
+      "close": 166.53,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 209.6,
+      "nextEarnings": "2027-02-04",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "GLD": {
+      "chg1d": -1.76,
+      "chg5d": -5.55,
+      "close": 335.2,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": null,
+      "nextEarnings": null,
+      "src": "fool.com 시세 (전일종가 341.19)"
+    },
+    "GOOGL": {
+      "chg1d": -3.46,
+      "chg5d": -8.72,
+      "close": 272.66,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 3274.5,
+      "nextEarnings": "2027-02-03",
+      "src": "investing.com·stocktitan 11/19"
+    },
+    "HD": {
+      "chg1d": -0.28,
+      "chg5d": -3.32,
+      "close": 336.68,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 336.9,
+      "nextEarnings": "2027-02-23",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "INTC": {
+      "chg1d": 1.92,
+      "chg5d": -8.95,
+      "close": 55.72,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 302.4,
+      "nextEarnings": "2027-01-28",
+      "src": "seoul.co.kr 11/20 (11/19 종가)"
+    },
+    "INTU": {
+      "chg1d": -1.03,
+      "chg5d": -8.86,
+      "close": 310.02,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 83.7,
+      "nextEarnings": null,
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "ISRG": {
+      "chg1d": -3.27,
+      "chg5d": -7.42,
+      "close": 407.24,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 145.9,
+      "nextEarnings": "2027-01-28",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "JPM": {
+      "chg1d": -1.16,
+      "chg5d": -6.55,
+      "close": 320.36,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 860.7,
+      "nextEarnings": "2027-01-14",
+      "src": "fool.com 시세 (11/18 종가 대비 확인)"
+    },
+    "KO": {
+      "chg1d": -2.04,
+      "chg5d": -1.39,
+      "close": 96.09,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 422.8,
+      "nextEarnings": "2027-02-16",
+      "src": "financialcontent.com 히스토리 11/19"
+    },
+    "LIN": {
+      "chg1d": -0.38,
+      "chg5d": -2.35,
+      "close": 510.21,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 235.1,
+      "nextEarnings": "2027-02-11",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "LLY": {
+      "chg1d": -2.33,
+      "chg5d": -5.3,
+      "close": 1351.65,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 1340.1,
+      "nextEarnings": "2027-02-10",
+      "src": "seoul.co.kr 11/20 (11/19 종가)"
+    },
+    "LRCX": {
+      "chg1d": -3.67,
+      "chg5d": -12.78,
+      "close": 203.9,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 260.4,
+      "nextEarnings": "2027-01-27",
+      "src": "news.jkn.co.kr 11/20 (11/19 종가)"
+    },
+    "META": {
+      "chg1d": -3.27,
+      "chg5d": -4.39,
+      "close": 596.22,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 1548.2,
+      "nextEarnings": "2027-01-27",
+      "src": "seoul.co.kr 11/20·investing.com"
+    },
+    "MSFT": {
+      "chg1d": -1.97,
+      "chg5d": -4.72,
+      "close": 498.3,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 3729.5,
+      "nextEarnings": "2027-01-27",
+      "src": "investing.com·stocktitan 11/19"
+    },
+    "MU": {
+      "chg1d": -2.1,
+      "chg5d": -13.52,
+      "close": 690.44,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 684.3,
+      "nextEarnings": "2026-12-16",
+      "src": "seoul.co.kr 11/20 (11/19 종가)"
+    },
+    "NFLX": {
+      "chg1d": -2.32,
+      "chg5d": -6.8,
+      "close": 58.43,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 243.3,
+      "nextEarnings": "2027-01-19",
+      "src": "globalbankingandfinance.com 11/19"
+    },
+    "NKE": {
+      "chg1d": -5.44,
+      "chg5d": -9.09,
+      "close": 34.33,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 53.9,
+      "nextEarnings": "2026-12-17",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "NOW": {
+      "chg1d": -1.89,
+      "chg5d": -11.71,
+      "close": 88.87,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 94,
+      "nextEarnings": "2027-01-27",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "NVDA": {
+      "chg1d": -3.3,
+      "chg5d": -12.16,
+      "close": 145.98,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 3640,
+      "nextEarnings": "2027-02-24",
+      "src": "fool.com Stock Market Today 11/19"
+    },
+    "ORCL": {
+      "chg1d": -2.97,
+      "chg5d": -13.06,
+      "close": 110.51,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 344.4,
+      "nextEarnings": "2026-12-09",
+      "src": "fool.com 시세 · seoul.co.kr 등락률 일치"
+    },
+    "PANW": {
+      "chg1d": 6.42,
+      "chg5d": 12.11,
+      "close": 361.73,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 278.3,
+      "nextEarnings": "2027-02-16",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "PEP": {
+      "chg1d": -2.02,
+      "chg5d": -2.29,
+      "close": 139,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 193.3,
+      "nextEarnings": "2027-02-10",
+      "src": "financialcontent.com 히스토리 11/19"
+    },
+    "PLTR": {
+      "chg1d": -1.91,
+      "chg5d": -10.41,
+      "close": 153.68,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 351.8,
+      "nextEarnings": "2027-02-01",
+      "src": "financialcontent.com 히스토리 11/19 · MarketBeat"
+    },
+    "QQQ": {
+      "chg1d": -2.19,
+      "chg5d": -6.26,
+      "close": 645.1,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": null,
+      "nextEarnings": null,
+      "src": "fool.com 시세 · substack The Close 11/19 일치"
+    },
+    "SCHD": {
+      "chg1d": -1.46,
+      "chg5d": -4.82,
+      "close": 34.2,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": null,
+      "nextEarnings": null,
+      "src": "fool.com 시세 · schwab 11/18 종가 34.70 일치"
+    },
+    "SHOP": {
+      "chg1d": -5.34,
+      "chg5d": -10.09,
+      "close": 131.97,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 179.4,
+      "nextEarnings": "2027-02-17",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "SMH": {
+      "chg1d": -2.64,
+      "chg5d": -10.82,
+      "close": 447.42,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": null,
+      "nextEarnings": null,
+      "src": "fool.com 시세 (SOX -2.42% 일치)"
+    },
+    "SNPS": {
+      "chg1d": -0.71,
+      "chg5d": -6.87,
+      "close": 430.91,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 83.5,
+      "nextEarnings": "2026-12-08",
+      "src": "financialcontent.com 히스토리 11/19"
+    },
+    "SPCX": {
+      "chg1d": -3.53,
+      "chg5d": -1.08,
+      "close": 138.43,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 1856.2,
+      "nextEarnings": "2027-02-09",
+      "src": "investing.com 11/19"
+    },
+    "TLT": {
+      "chg1d": 0.15,
+      "chg5d": 0.78,
+      "close": 80.34,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": null,
+      "nextEarnings": null,
+      "src": "fool.com 시세 · ishares 11/18 종가 80.22 일치"
+    },
+    "TMUS": {
+      "chg1d": -0.91,
+      "chg5d": -4.97,
+      "close": 162.53,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 173.7,
+      "nextEarnings": "2027-02-10",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "TSLA": {
+      "chg1d": -2.43,
+      "chg5d": -5.8,
+      "close": 374.41,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 1364.3,
+      "nextEarnings": "2027-01-27",
+      "src": "seoul.co.kr 11/20·investing.com"
+    },
+    "TXN": {
+      "chg1d": -2.28,
+      "chg5d": -8.55,
+      "close": 285.75,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 267.2,
+      "nextEarnings": "2027-01-26",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "UBER": {
+      "chg1d": -4.58,
+      "chg5d": -5.09,
+      "close": 65.6,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 140.4,
+      "nextEarnings": "2027-02-03",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "UNH": {
+      "chg1d": -5.58,
+      "chg5d": -18.45,
+      "close": 330.37,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": 313.5,
+      "nextEarnings": "2027-01-20",
+      "src": "fool.com 시세 (11/18 종가 대비 확인)"
+    },
+    "V": {
+      "chg1d": -3.08,
+      "chg5d": -4.3,
+      "close": 402.25,
+      "date": "2026-11-19",
+      "earningsTime": "AMC",
+      "marketCap": 770,
+      "nextEarnings": "2027-01-28",
+      "src": "fool.com 시세 (Last close 11/19)"
+    },
+    "VOO": {
+      "chg1d": -1.99,
+      "chg5d": -5.47,
+      "close": 657.93,
+      "date": "2026-11-19",
+      "earningsTime": null,
+      "marketCap": null,
+      "nextEarnings": null,
+      "src": "fool.com 시세 (S&P -2.02% 일치)"
+    },
+    "WMT": {
+      "chg1d": -1.04,
+      "chg5d": -0.12,
+      "close": 126.04,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 1006.1,
+      "nextEarnings": "2027-02-18",
+      "src": "stocktitan·substack 11/19"
+    },
+    "XOM": {
+      "chg1d": -1.01,
+      "chg5d": -6.41,
+      "close": 158.93,
+      "date": "2026-11-19",
+      "earningsTime": "BMO",
+      "marketCap": 655,
+      "nextEarnings": "2027-01-29",
+      "src": "fool.com 시세 (Last close 11/19)"
+    }
+  },
+  "sectors": {
+    "경기소비재": {
+      "chg1d": -2.81,
+      "chg5d": -3.44,
+      "etf": "XLY",
+      "ytd": -2.39
+    },
+    "금융": {
+      "chg1d": -1.45,
+      "chg5d": -5.25,
+      "etf": "XLF",
+      "ytd": 2.76
+    },
+    "기술": {
+      "chg1d": -1.91,
+      "chg5d": -7.5,
+      "etf": "XLK",
+      "ytd": 12.03
+    },
+    "부동산": {
+      "chg1d": -1.71,
+      "chg5d": -3.36,
+      "etf": "XLRE",
+      "ytd": 8.81
+    },
+    "산업재": {
+      "chg1d": -2,
+      "chg5d": -4.35,
+      "etf": "XLI",
+      "ytd": 4.9
+    },
+    "소재": {
+      "chg1d": -2.03,
+      "chg5d": -5.32,
+      "etf": "XLB",
+      "ytd": 10.43
+    },
+    "에너지": {
+      "chg1d": -0.64,
+      "chg5d": -6.22,
+      "etf": "XLE",
+      "ytd": 36.19
+    },
+    "유틸리티": {
+      "chg1d": -1.22,
+      "chg5d": -2.27,
+      "etf": "XLU",
+      "ytd": 2.91
+    },
+    "커뮤니케이션": {
+      "chg1d": -2.69,
+      "chg5d": -5.44,
+      "etf": "XLC",
+      "ytd": -12.71
+    },
+    "필수소비재": {
+      "chg1d": -1.41,
+      "chg5d": -2.62,
+      "etf": "XLP",
+      "ytd": 18
+    },
+    "헬스케어": {
+      "chg1d": -2.06,
+      "chg5d": -6.01,
+      "etf": "XLV",
+      "ytd": 16.07
+    }
+  },
+  "updatedAt": "2026-11-20T14:55:00+09:00"
+}

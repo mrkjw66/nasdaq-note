@@ -1,1 +1,95 @@
-{"items": {"ADI": {"date": "2026-11-24", "epsEst": 3.89, "move": null, "revEst": 4.32, "revNote": "회사 매출 전망 43억±1억 달러, 조정 EPS 3.86±0.15달러", "src": "Barchart(Yahoo Finance), Hudson Labs", "time": "BMO", "watch": "데이터센터·산업용 수요와 다음 분기 전망, 칩주 급락 뒤 주문 흐름"}, "CRM": {"date": "2026-12-02", "epsEst": null, "move": null, "revEst": null, "revNote": "회사 연간 매출 전망 461억~464억 달러", "src": "Salesforce IR(날짜), Metirai(연간 전망)", "time": "AMC", "watch": "Agentforce 연간 반복 매출 성장과 남은 계약(cRPO), 앤트로픽 상장 뒤 AI 대체 걱정에 대한 설명"}, "CRWD": {"date": "2026-12-01", "epsEst": null, "move": null, "revEst": 1.5, "revNote": null, "src": "The Right Trader(매출)", "time": "AMC", "watch": "연간 반복 매출(ARR) 성장과 Falcon Flex 확산, 최근 보안주 급락 뒤 다음 분기 전망"}, "HD": {"date": "2026-11-17", "epsEst": 3.86, "move": null, "revEst": 42.72, "revNote": null, "src": "Zacks, Barchart(Yahoo Finance)", "time": "BMO", "watch": "고금리 속 대형 리모델링 수요와 연간 전망 유지 여부"}, "INTU": {"date": "2026-11-19", "epsEst": 2.64, "move": 3.3, "revEst": 4.31, "revNote": null, "src": "Tradestie(애널리스트 26명 EPS·23명 매출 집계, 옵션)", "time": "AMC", "watch": "크레딧카르마·QuickBooks 성장과 AI 기능 수익화, 소프트웨어주 급락 뒤 연간 전망 유지 여부"}, "NVDA": {"date": "2026-11-17", "epsEst": 2.47, "move": 10.6, "revEst": 109, "revNote": "회사 매출 전망 1,080억 달러±2%", "src": "CMC Markets(11/13 컨센서스), Earnings Watcher(옵션), 엔비디아 공식 발표 — 날짜 확정(CEO 교체 후에도 유지)", "time": "AMC", "watch": "데이터센터 매출과 다음 분기 전망, 황 CEO 사임 뒤 크레스 임시 CEO 체제의 설명과 후임 일정"}, "PANW": {"date": "2026-11-18", "epsEst": 0.97, "move": null, "revEst": 3.3, "revNote": null, "src": "TipRanks(EPS), The Right Trader(매출)", "time": "AMC", "watch": "차세대 보안 연간 반복 매출(회사 전망 95.4~95.6억 달러)과 최근 보안주 급락 뒤 전망"}, "SNPS": {"date": "2026-12-08", "epsEst": null, "move": null, "revEst": null, "revNote": "회사 매출 전망 25.3~25.8억 달러", "src": "Trefis", "time": "AMC", "watch": "가이던스를 채우는지, Ansys 인수 효과"}, "WMT": {"date": "2026-11-19", "epsEst": 0.63, "move": null, "revEst": 187.2, "revNote": null, "src": "Tradestie(애널리스트 34명 집계)", "time": "BMO", "watch": "미국 동일점 매출과 연말 쇼핑 시즌 전망"}}, "updatedAt": "2026-11-18T07:18:34+09:00"}
+{
+  "items": {
+    "ADI": {
+      "date": "2026-11-24",
+      "epsEst": 3.89,
+      "move": null,
+      "revEst": 4.32,
+      "revNote": "회사 매출 전망 43억±1억 달러, 조정 EPS 3.86±0.15달러",
+      "src": "Barchart(Yahoo Finance), Hudson Labs",
+      "time": "BMO",
+      "watch": "데이터센터·산업용 수요와 다음 분기 전망, 칩주 급락 뒤 주문 흐름"
+    },
+    "CRM": {
+      "date": "2026-12-02",
+      "epsEst": null,
+      "move": null,
+      "revEst": null,
+      "revNote": "회사 연간 매출 전망 461억~464억 달러",
+      "src": "Salesforce IR(날짜), Metirai(연간 전망)",
+      "time": "AMC",
+      "watch": "Agentforce 연간 반복 매출 성장과 남은 계약(cRPO), 앤트로픽 상장 뒤 AI 대체 걱정에 대한 설명"
+    },
+    "CRWD": {
+      "date": "2026-12-01",
+      "epsEst": null,
+      "move": null,
+      "revEst": 1.5,
+      "revNote": null,
+      "src": "The Right Trader(매출)",
+      "time": "AMC",
+      "watch": "연간 반복 매출(ARR) 성장과 Falcon Flex 확산, 최근 보안주 급락 뒤 다음 분기 전망"
+    },
+    "HD": {
+      "date": "2026-11-17",
+      "epsEst": 3.86,
+      "move": null,
+      "revEst": 42.72,
+      "revNote": null,
+      "src": "Zacks, Barchart(Yahoo Finance)",
+      "time": "BMO",
+      "watch": "고금리 속 대형 리모델링 수요와 연간 전망 유지 여부"
+    },
+    "INTU": {
+      "date": "2026-11-19",
+      "epsEst": 2.64,
+      "move": 3.3,
+      "revEst": 4.31,
+      "revNote": null,
+      "src": "Tradestie(애널리스트 26명 EPS·23명 매출 집계, 옵션)",
+      "time": "AMC",
+      "watch": "크레딧카르마·QuickBooks 성장과 AI 기능 수익화, 소프트웨어주 급락 뒤 연간 전망 유지 여부"
+    },
+    "NVDA": {
+      "date": "2026-11-17",
+      "epsEst": 2.47,
+      "move": 10.6,
+      "revEst": 109,
+      "revNote": "회사 매출 전망 1,080억 달러±2%",
+      "src": "CMC Markets(11/13 컨센서스), Earnings Watcher(옵션), 엔비디아 공식 발표 — 날짜 확정(CEO 교체 후에도 유지)",
+      "time": "AMC",
+      "watch": "데이터센터 매출과 다음 분기 전망, 황 CEO 사임 뒤 크레스 임시 CEO 체제의 설명과 후임 일정"
+    },
+    "PANW": {
+      "date": "2026-11-18",
+      "epsEst": 0.97,
+      "move": null,
+      "revEst": 3.3,
+      "revNote": null,
+      "src": "TipRanks(EPS), The Right Trader(매출)",
+      "time": "AMC",
+      "watch": "차세대 보안 연간 반복 매출(회사 전망 95.4~95.6억 달러)과 최근 보안주 급락 뒤 전망"
+    },
+    "SNPS": {
+      "date": "2026-12-08",
+      "epsEst": null,
+      "move": null,
+      "revEst": null,
+      "revNote": "회사 매출 전망 25.3~25.8억 달러",
+      "src": "Trefis",
+      "time": "AMC",
+      "watch": "가이던스를 채우는지, Ansys 인수 효과"
+    },
+    "WMT": {
+      "date": "2026-11-19",
+      "epsEst": 0.63,
+      "move": null,
+      "revEst": 187.2,
+      "revNote": null,
+      "src": "Tradestie(애널리스트 34명 집계)",
+      "time": "BMO",
+      "watch": "미국 동일점 매출과 연말 쇼핑 시즌 전망"
+    }
+  },
+  "updatedAt": "2026-11-18T07:18:34+09:00"
+}
